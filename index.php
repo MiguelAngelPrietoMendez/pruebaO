@@ -38,7 +38,7 @@
                             <div class="panel-heading">
                                 <span class="glyphicon glyphicon-lock"></span>Login</div>
                             <div class="panel-body">
-                                <form class="form-horizontal" role="form">
+                                <form class="form-horizontal" role="form" action="models/create_session.php" method="POST">
                                     <div class="form-group">
                                         <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
                                         <div class="col-sm-9">
@@ -47,7 +47,7 @@
                                                     <i class="glyphicon glyphicon-user"></i>
                                                 </span>
                                                 <input type="email" class="form-control" id="inputEmail3" placeholder="Email"
-                                                       required="">
+                                                       required="" name="itUsuario">
                                             </div>
                                         </div>
                                     </div>
@@ -59,7 +59,7 @@
                                                     <i class="glyphicon glyphicon-lock"></i>
                                                 </span>
                                                 <input type="password" class="form-control" id="inputPassword3" placeholder="Contraseña"
-                                                       required="">
+                                                       required="" name="itContrasena">
                                             </div>
                                         </div>
                                     </div>

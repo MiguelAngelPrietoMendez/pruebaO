@@ -6,9 +6,7 @@
         <?php
         include 'Menu.php';
         ?>  
-        <script>
-                    asdasdasdasdasd
-        </script>
+       
         <!--ALERTAS-->
         <div id="area_alertas"></div>   
         <!--ALERTAS-->
