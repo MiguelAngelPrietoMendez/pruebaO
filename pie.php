@@ -11,7 +11,7 @@
           <div class="col-sm-6">
             <p class="text-info text-right">
               <br>
-              <br>miguel mk
+              <br>miguel mk x 2
             </p>
             <div class="row">
               <div class="col-md-12 hidden-lg hidden-md hidden-sm text-left">
