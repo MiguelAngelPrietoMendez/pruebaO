@@ -1,23 +1,47 @@
-<html>
 
+
+<html>
     <head>
         <?php
         include 'head.php';
         ?>
     </head>
+    <script>
+        $(document).ready(function ()
+        {
+
+<?php
+if (isset($_GET['Error']) && $_GET['Error'] == 1) {
+    ?>
+                Alert_Warning('El usuario no existe');
+    <?php
+}
+?>
+<?php
+if (isset($_GET['Error']) && $_GET['Error'] == 2) {
+    ?>
+                Alert_Info('La contraseña del usuario es incorrecta');
+    <?php
+}
+?>
+        });
+    </script>
 
     <body>
+
         <div class="navbar navbar-default navbar-static-top">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <a class="navbar-brand" href="#" id="logo">
-
                         <img id="logo" src="img/logo.png" alt="">
                     </a>
                 </div>
             </div>
         </div>
+        <!--ALERTAS-->
+        <div id="area_alertas"  ></div>  
+        <!--ALERTAS-->
         <div class="section">
             <div class="container">
                 <div class="row">
@@ -38,7 +62,7 @@
                             <div class="panel-heading">
                                 <span class="glyphicon glyphicon-lock"></span>Login</div>
                             <div class="panel-body">
-                                <form class="form-horizontal" role="form" action="models/create_session.php" method="POST">
+                                <form class="form-horizontal" role="form" action="models/create_sesion.php" method="POST">
                                     <div class="form-group">
                                         <label for="inputEmail3" class="col-sm-3 control-label">Email</label>
                                         <div class="col-sm-9">
@@ -73,8 +97,8 @@
                                     </div>
                                     <div class="form-group last">
                                         <div class="col-sm-offset-3 col-sm-9">
-                                            <button type="submit" class="btn btn-success btn-sm">Iniciar sesión</button>
-                                            <button type="reset" class="btn btn-default btn-sm">Cancelar</button>
+                                            <button type="submit" class="btn btn-success btn-sm" >Iniciar sesión</button>
+                                            <button type="reset" class="btn btn-default btn-sm" >Cancelar</button>
                                         </div>
                                     </div>
                                 </form>

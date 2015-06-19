@@ -99,7 +99,10 @@
             $("#input-ru").fileinput({
                 language: "es",
                 uploadUrl: "http://localhost/site/file-upload-batch",
-                allowedFileExtensions: ["jpg", "png", "gif"]
+                allowedFileExtensions: ["jpg", "png", "gif"],
+                minFileCount: 1,
+                maxFileCount: 3
+
             });
         </script>       
     </body>

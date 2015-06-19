@@ -52,7 +52,7 @@ function Alert_Success(mensaje) {
     alertTimeout();
 }
 function Alert_Info(mensaje) {
-    $('#area_alertas').append(' <div class="alert alert-info" role="alert"> <strong>Aviso!  </strong>' + mensaje + '</div>');
+    $('#area_alertas').append(' <div class="alert alert-info" role="alert" > <strong>Aviso!  </strong>' + mensaje + '</div>');
     alertTimeout();
 }
 function Alert_Warning(mensaje) {
@@ -87,3 +87,17 @@ $(function () {
 
 });
 
+function InfoSoli(IdSolicitud)
+{
+    $.ajax({
+        type: 'POST',
+        url: './models/InfoSolicitud.php',
+        data: "IdSolicitud=" + IdSolicitud,
+        success: function (data)
+        {
+          
+            $('.modal-content').html(data);
+            
+        }
+    });
+}

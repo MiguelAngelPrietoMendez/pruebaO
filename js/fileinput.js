@@ -284,9 +284,9 @@
             '    <div class="file-upload-indicator" tabindex="-1" title="{indicatorTitle}">{indicator}</div>\n' +
             '    <div class="clearfix"></div>\n' +
             '</div>',
-        tActionDelete = '<button type="button" class="kv-file-remove {removeClass}" ' +
+        tActionDelete = '<button  type="button" class="kv-file-remove {removeClass}" ' +
             'title="{removeTitle}"{dataUrl}{dataKey}>{removeIcon}</button>\n',
-        tActionUpload = '<button type="button" class="kv-file-upload {uploadClass}" title="{uploadTitle}">' +
+        tActionUpload = '<button   type="button" class="kv-file-upload {uploadClass}" title="{uploadTitle}">' +
             '   {uploadIcon}\n</button>\n',
         tGeneric = '<div class="file-preview-frame{frameClass}" id="{previewId}" data-fileindex="{fileindex}">\n' +
             '   {content}\n' +
@@ -2079,7 +2079,7 @@
             if (!self.isUploadable || self.isDisabled) {
                 content = '<button type="submit" title="' + self.uploadTitle + '"class="' + css + '"' + status + '>' + self.uploadIcon + self.uploadLabel + '</button>';
             } else {
-                content = '<a href="' + self.uploadUrl + '" title="' + self.uploadTitle + '" class="' + css + '"' + status + '>' + self.uploadIcon + self.uploadLabel + '</a>';
+              //  content = '<a href="' + self.uploadUrl + '" title="' + self.uploadTitle + '" class="' + css + '"' + status + '>' + self.uploadIcon + self.uploadLabel + '</a>';
             }
             return content;
         }
