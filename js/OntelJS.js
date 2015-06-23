@@ -97,6 +97,30 @@ function InfoSoli(IdSolicitud)
         }
     });
 }
+function TablaSolicitudes(Ticket)
+{
+    if (Ticket !== null) {
+        $.ajax({
+            type: 'POST',
+            url: 'controls/TablaSolicitudes.php',
+            data: "ticket=" + Ticket,
+            success: function (data)
+            {
+                $('#TablaSolicitud').html(data);
+            }
+        });
+    } else {
+        $.ajax({            
+            url: 'controls/TablaSolicitudes.php',
+            success: function (data)
+            {
+                $('#tablaSolicitudes').html(data);
+            }
+        });
+
+    }
+
+}
 function InfoUsuario(IdUsuario)
 {
     $.ajax({
@@ -142,8 +166,8 @@ $(document).ready(function () {
 
 $('#all').click(function (e) {
     alert(123);
-    var href = this.href;  
-    e.preventDefault();  
+    var href = this.href;
+    e.preventDefault();
     $.ajax({
         url: 'inicio.php',
         data: {some: data},
@@ -152,8 +176,3 @@ $('#all').click(function (e) {
         }
     });
 });
-//$(document).ready(function () {
-//    $("#all").click(function () {
-//        window.location.replace("inicio.php");
-//    })
-//});
