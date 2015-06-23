@@ -36,6 +36,10 @@
         msgProgress: 'Cargando archivo {index} of {files} - {name} - {percent}% completado.',
         msgSelected: '{n} {files} seleccionados',
         msgFoldersNotAllowed: 'Arrastre y suelte únicamente archivos! Se omite {n} carpeta(s).',
+        msgImageWidthSmall: 'Ancho de la imagen de archivo "{name}" debe ser al menos {size} px.',
+        msgImageHeightSmall: 'Altura de la imagen de archivo "{name}" debe ser al menos {size} px.',
+        msgImageWidthLarge: 'Ancho de la imagen de archivo "{name}" no puede exceder de {size} px.',
+        msgImageHeightLarge: 'Altura de la imagen de archivo "{name}" no puede exceder de {size} px.',
         dropZoneTitle: 'Arrastre y suelte los archivos aquí &hellip;'
     };
 })(window.jQuery);

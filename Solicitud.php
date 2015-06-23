@@ -23,14 +23,14 @@
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <form class="form-horizontal" role="form" id="FormSolicitud">
+                        <form class="form-horizontal" role="form" id="FormSolicitud" method="POST" action="models/createTicket.php" enctype="multipart/form-data">
 
                             <div class="form-group">
                                 <div class="col-sm-2">
                                     <label for="inputEmail3" class="control-label" >Nombre de la Solicitud</label>
                                 </div>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control " id="inputEmail3" placeholder="Solicitud" required>
+                                    <input name="itName" type="text" class="form-control " id="inputEmail3" placeholder="Solicitud" required>
                                 </div>
                             </div>
 
@@ -39,7 +39,7 @@
                                     <label for="inputPassword3" class="control-label">Descripción</label>
                                 </div>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control input-sm " type="textarea" id="message"
+                                    <textarea name="taDescription" class="form-control input-sm " type="textarea" id="message"
                                               placeholder="Descripción de la solicitud" maxlength="250" rows="7" required></textarea>
                                     <span class="help-block">
                                         <p id="characterLeft" class="help-block ">Le quedan : 250 caracteres</p>
@@ -66,8 +66,8 @@
                                 </div>
 
                                 <div class="col-sm-9">
-                                    <select class="form-control" class="required">
-                                        <option value="0" selected="">Seleccionar un  sub tipo de solicitud</option>
+                                    <select name="selApplicationSoft"  class="form-control" class="required">
+                                        <option value="0">Seleccionar un  sub tipo de solicitud</option>
                                         <optgroup label="SALUD TOTAL">
                                             <option value="1">STAR</option>
                                             <option value="2">Analisis Seg.  Pendientes</option>
@@ -100,13 +100,13 @@
                                 </div>
 
                                 <div class="col-sm-9">
-                                    <select class="form-control">
-                                        <option value="0" selected="">Seleccionar un  sub tipo de solicitud</option>
-                                        <option value="1">Perifericos</option>
-                                        <option value="2">Mouse</option>
-                                        <option value="2">Teclado</option>
-                                        <option value="2">Pantalla</option>
-                                        <option value="2">Torre</option>
+                                    <select name="selApplicationHard" class="form-control">
+                                        <option value="0" >Seleccionar un  sub tipo de solicitud</option>
+                                        <option value="17">Perifericos</option>
+                                        <option value="18">Mouse</option>
+                                        <option value="19">Teclado</option>
+                                        <option value="20">Pantalla</option>
+                                        <option value="21">Torre</option>
                                     </select>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                                 <div class="col-sm-2"> 
                                     <label for="inputEmail3" class="control-label">Adjuntar Archivos</label></div>
                                 <div class="col-sm-10">
-                                    <input id="input-ru" type="file" multiple=true class="file-loading">
+                                    <input   name="file[]" id="input-700" type="file" multiple=true class="file-loading">
                                 </div>
 
                                 <div class="form-group">
@@ -144,20 +144,26 @@
             </thead>
         </table>
         <script>
-            $("#input-ru").fileinput({
+            $("#input-700").fileinput({
                 language: "es",
                 uploadUrl: "http://localhost/site/file-upload-batch",
-                allowedFileExtensions: ["jpg", "png", "gif"],
+                allowedFileExtensions: ["jpg", "png", "gif","doc","xls","pdf"],
+               // allowedFileTypes:["jpg", "png", "gif","doc"],
                 minFileCount: 1,
-                maxFileCount: 3
-
+                maxFileCount: 3,
+                uploadAsync: true
+                
+              
+             
             });
-        </script>       
-    </body>
+        </script> 
+        
+        
+   
     <?php
     include 'pie.php';
     ?>
     <link href="css/bootstrap-table.css" rel="stylesheet" type="text/css"/>
     <script src="js/bootstrap-table.js" type="text/javascript"></script>
-
+ </body>
 </html>
