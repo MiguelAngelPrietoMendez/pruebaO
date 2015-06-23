@@ -3,9 +3,9 @@ session_start();
 include 'models/access_db.php';
 ?>
 <html lang="es">
-<?php
-include 'head.php';
-?>  
+    <?php
+    include 'head.php';
+    ?>  
 
     <script>
         $(document).ready(function ()
@@ -25,9 +25,9 @@ if (isset($_GET['IdUsuario'])) {
         });
     </script>   
     <body>
-<?php
-include 'Menu.php';
-?>  
+        <?php
+        include 'Menu.php';
+        ?>  
         <?php
         //Consulta de las solicitud  
         if ($_SESSION['Rol'] == "Administrador") { //Valida Permisos Administrador
@@ -83,58 +83,54 @@ include 'Menu.php';
                                 </tr>
                             </thead>
                             <tbody>
-<?php
-while ($row = $result->fetch_array()) {
-    echo"<tr>"
-    . "<td>" . $row['IdSolicitud'] . "</td>
-                                    <td>" . $row['Solicitud'] . "</td>
+                                <?php
+                                while ($row = $result->fetch_array()) {
+                                    echo"<tr>"
+                                    . "<td>" . $row['IdSolicitud'] . "</td>
+                                    <td>" . $row['nombre'] . "</td>
                                     <td>" . $row['FechaInicio'] . "</td>
                                     <td>" . $row['FechaFin'] . "</td>";
-    $resultEstado = $mysqli->query("SELECT * FROM SolicitudProceso WHERE IdSolicitud =" . $row['IdSolicitud'] . " ORDER BY solicitudproceso.FechaCreacion DESC LIMIT 1");
-    if ($rowEstado = $resultEstado->fetch_array()) {
-        echo "<td>";
-        if ($rowEstado['Proceso'] == 'Abierto') {
-            echo "<span class='label label-primary'>Abierto</span>";
-        }
-        if ($rowEstado['Proceso'] == 'Cancelado') {
-            echo "<span class='label label-danger'>Cancelado</span>";
-        }
-        if ($rowEstado['Proceso'] == 'Cerrado') {
-            echo "<span class='label label-default'>Cerrado</span>";
-        }
-        if ($rowEstado['Proceso'] == 'Proceso') {
-            echo "<span class='label label-success'>Proceso</span>";
-        }
-        if ($rowEstado['Proceso'] == 'ProcesoSistemas') {
-            echo "<span class='label label-success'>Proceso Sistemas</span>";
-        }
-        if ($rowEstado['Proceso'] == 'Resuelto') {
-            echo "<span class='label label-warning'>Resuelto</span>";
-        }
-    }
-    ?>
+                                    $resultEstado = $mysqli->query("SELECT * FROM SolicitudProceso WHERE IdSolicitud =" . $row['IdSolicitud'] . " ORDER BY solicitudproceso.FechaCreacion DESC LIMIT 1");
+                                    if ($rowEstado = $resultEstado->fetch_array()) {
+                                        echo "<td>";
+                                        if ($rowEstado['Proceso'] == 'Abierto') {
+                                            echo "<span class='label label-primary'>Abierto</span>";
+                                        }
+                                        if ($rowEstado['Proceso'] == 'Cancelado') {
+                                            echo "<span class='label label-danger'>Cancelado</span>";
+                                        }
+                                        if ($rowEstado['Proceso'] == 'Cerrado') {
+                                            echo "<span class='label label-default'>Cerrado</span>";
+                                        }
+                                        if ($rowEstado['Proceso'] == 'Proceso') {
+                                            echo "<span class='label label-success'>Proceso</span>";
+                                        }
+                                        if ($rowEstado['Proceso'] == 'ProcesoSistemas') {
+                                            echo "<span class='label label-success'>Proceso Sistemas</span>";
+                                        }
+                                        if ($rowEstado['Proceso'] == 'Resuelto') {
+                                            echo "<span class='label label-warning'>Resuelto</span>";
+                                        }
+                                    }
+                                    ?>
                                     </td>
                                 <td>
                                     <button type=button' class='btn btn-default' data-toggle='modal'  href="#stack1" onclick="InfoSoli(<?php echo $row['IdSolicitud']; ?>);" >
                                         <i class='fa fa-eye fa-fw fa-lg'></i>
                                     </button>
                                 </td>
-    <?php
-}
-?>
+                                <?php
+                            }
+                            ?>
                         </table>
-
-
                     </div>
                 </div>
             </div>
         </div>
-
     </body>
-<?php
-include 'pie.php';
-?>
-
+    <?php
+    include 'pie.php';
+    ?>
     <script src="js/bootstrap-table.js" type="text/javascript"></script>
     <script src="js/bootstrap-table-es-MX.js" type="text/javascript"></script>
     <link href="css/bootstrap-table.css" rel="stylesheet" type="text/css"/>

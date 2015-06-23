@@ -3,7 +3,7 @@ include 'access_db.php';
 
 $IdSolicitud = $_POST['IdSolicitud'];
 //Consulta de las solicitud validando el ultimo estado
-$result = $mysqli->query("SELECT * FROM Solicitud WHERE IdSolicitud = " . $IdSolicitud);
+$result = $mysqli->query("SELECT * FROM Solicitud INNER JOIN subtiposolicitud  ON Solicitud.IdSubtipoSolicitud =subtiposolicitud.IdSubtipoSolicitud WHERE Solicitud.IdSolicitud = " . $IdSolicitud);
 $result2 = $mysqli->query("SELECT * FROM SolicitudProceso WHERE IdSolicitud = " . $IdSolicitud);
 $general = $result->fetch_array();
 ?>
@@ -25,10 +25,36 @@ $general = $result->fetch_array();
             <div class="col-sm-3">
 
                 <label for="text" class="control-label" style="font-weight: normal;
-                       "><?php echo $general['Solicitud']; ?></label>
+                       "><?php echo $general['nombre']; ?></label>
             </div>
         </div>
         <hr>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <label for="inputEmail3" class="control-label" style='display:initial;'>Tipo Solicitud:</label>
+            </div>
+            <div class="col-sm-4">
+                <?php
+                if ($general['Tipo'] == 1) {
+                    echo "Software";
+                } else {
+                    echo "Hardware";
+                }
+                ?>
+            </div>
+            <div class="col-sm-2">
+                <label for="inputEmail3" class="control-label"  style='display:initial;'> <?php
+                    if ($general['Tipo'] == 1) {
+                        echo "Software: ";
+                    } else {
+                        echo "Hardware: ";
+                    }
+                    ?></label>
+            </div>
+            <div class="col-sm-4">
+                <?php echo $general['SubTipoSolicitud']; ?>
+            </div>
+        </div>
         <div class="form-group">
             <div class="col-sm-2">
                 <label for="inputPassword3" class="control-label">Descipción:</label>
@@ -44,13 +70,13 @@ $general = $result->fetch_array();
 
         <div class="form-group">
             <div class="col-sm-2">
-                <label for="inputEmail3" class="control-label" style='display:initial;'>Fecha Inicio</label>
+                <label for="inputEmail3" class="control-label" style='display:initial;'>Fecha Inicio:</label>
             </div>
             <div class="col-sm-4">
                 <?php echo $general['FechaInicio']; ?>
             </div>
             <div class="col-sm-2">
-                <label for="inputEmail3" class="control-label"  style='display:initial;'>Fecha Fin</label>
+                <label for="inputEmail3" class="control-label"  style='display:initial;'>Fecha Fin :</label>
             </div>
             <div class="col-sm-4">
                 <?php echo $general['FechaFin']; ?>
@@ -58,6 +84,21 @@ $general = $result->fetch_array();
         </div>
         <div class="form-group"></div>
     </form>
+    <hr>
+    <div class="form-group">
+        <div class="col-sm-2">
+            <label for="inputEmail3" class="control-label" style='display:initial;'>Fecha Inicio:</label>
+        </div>
+        <div class="col-sm-4">
+            <?php echo $general['FechaInicio']; ?>
+        </div>
+        <div class="col-sm-2">
+            <label for="inputEmail3" class="control-label"  style='display:initial;'>Fecha Fin :</label>
+        </div>
+        <div class="col-sm-4">
+            <?php echo $general['FechaFin']; ?>
+        </div>
+    </div>
     <div class="input-group">
         <div class="col-md-12">
             <hr>
@@ -119,10 +160,10 @@ $general = $result->fetch_array();
 </div>
 <!--POPPUP DE VALIDACION CANCELACION-->
 
- <!--POPPUO DE SIGUIENTE ESTADO-->
+<!--POPPUO DE SIGUIENTE ESTADO-->
 <div id="proceso" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
     <div class="modal-content">
-       
+
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h2 class="modal-title"><b>Siguiente Proceso</b></h2>
@@ -135,7 +176,7 @@ $general = $result->fetch_array();
                       placeholder="Observaciones del la solicitud en el proceso" maxlength="250" rows="7"></textarea>
             <select class="form-control">
                 <option value="0" selected="">Seleccione el proceso</option>
-                
+
                 <option value="1" >Abierto</option>
                 <option value="2"></option>
             </select>
@@ -146,4 +187,4 @@ $general = $result->fetch_array();
         </div>
     </div>
 </div>
- <!--POPPUO DE SIGUIENTE ESTADO-->
+<!--POPPUO DE SIGUIENTE ESTADO-->

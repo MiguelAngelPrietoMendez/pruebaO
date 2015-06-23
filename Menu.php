@@ -66,8 +66,7 @@ if (!isset($_SESSION['IdUsuario'])) {
                     <a href="solicitud.php">Crear Ticket</a>
                 </li>
             </ul>
-            <form class="navbar-form navbar-left" role="search" action="inicio.php
-                  " method="POST">
+            <form class="navbar-form navbar-left" role="search" action="inicio.php" method="POST">
                 <div class="form-group">
                     <input name="ticket" type="text" class="form-control" placeholder="Buscar # Ticket" required>
                 </div>
