@@ -15,10 +15,21 @@ if ($result = $mysqli->query("SELECT * FROM Usuarios WHERE Login='" . $itUsuario
         if ($RowUsuario > 0) {
             if ($row = mysqli_fetch_array($result2)) {
                 $_SESSION['IdUsuario'] = $row["IdUsuario"];
+
+                //Buscar permisos del usuario que esta creando sesion
+                $resultPermisos = $mysqli->query("SELECT * FROM UsuarioRol WHERE IdUsuario = " . $row['IdUsuario']);
+                $RowPermisos = $resultPermisos->num_rows;
+                if ($RowPermisos > 0) {
+                    if ($RowValor = mysqli_fetch_array($resultPermisos)) {
+                        $_SESSION['Rol'] = $RowValor['Rol'];
+                       
+                    }
+                }
             }
             $result->close();
             $result2->close();
-            header("Location: ../inicio.php");
+            $resultPermisos->close();
+            header("Location: ../inicio.php?IdUsuario=" . $_SESSION['IdUsuario']);
         } else {
             $result->close();
             $result2->close();

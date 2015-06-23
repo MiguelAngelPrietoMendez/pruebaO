@@ -3,21 +3,49 @@ session_start();
 include 'models/access_db.php';
 ?>
 <html lang="es">
-    <?php
-    include 'head.php';
-    ?>  
+<?php
+include 'head.php';
+?>  
+
     <script>
-
-    </script>
-
+        $(document).ready(function ()
+        {
+<?php
+if (isset($_GET['IdUsuario'])) {
+    $IdUsuario = $mysqli->real_escape_string($_GET["IdUsuario"]);
+    $result = $mysqli->query("SELECT * FROM Usuarios WHERE IdUsuario=" . $IdUsuario);
+    if ($row = $result->fetch_array()) {
+        $sNombre = $row['Nombres'] . " " . $row['Apellidos'];
+    }
+    ?>
+                Alert_Info("Bienvenido <?php echo $sNombre; ?>");
+    <?php
+}
+?>
+        });
+    </script>   
     <body>
+<?php
+include 'Menu.php';
+?>  
         <?php
-        include 'Menu.php';
-        ?>  
-        <?php
-        //Consulta de las solicitud validando el ultimo estado
-        $result = $mysqli->query("SELECT * FROM solicitud INNER JOIN  solicitudproceso ON solicitud.IdSolicitud = solicitudproceso.idsolicitud ORDER BY solicitudproceso.FechaCreacion DESC");
+        //Consulta de las solicitud  
+        if ($_SESSION['Rol'] == "Administrador") { //Valida Permisos Administrador
+            if (isset($_POST['ticket'])) { // Valida si es por buscador
+                $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdSolicitud=" . $_POST['ticket']);
+            } else {
+                $result = $mysqli->query("SELECT * FROM Solicitud");
+            }
+        } else {//Valida permisos usuario
+            if (isset($_POST['ticket'])) {// Valida si es por buscador
+                $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdSolicitud=" . $_POST['ticket'] . " AND IdUsuario = " . $_SESSION['IdUsuario']);
+            } else {
+                $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdUsuario =" . $_SESSION['IdUsuario']);
+            }
+        }
         ?>
+        <div id="stack1" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
+        </div>
         <!--ALERTAS-->
         <div id="area_alertas"></div>   
         <!--ALERTAS-->
@@ -26,154 +54,88 @@ include 'models/access_db.php';
              aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-
                 </div>
             </div>
         </div>
         <!--POPPUP DE INFORMACION DE LA SOLICITUD-->
-     
         <!--POPPUO DE SIGUIENTE ESTADO-->
-        <!--POPPUO DE SIGUIENTE ESTADO-->
-        <div class="section">           
-            <h1 id ="titulo" class="text-center">SOLICITUDES ABIERTAS</h1>            
-        </div>
 
+        <div class="section">           
+            <h1 id ="titulo" class="text-center">SOLICITUDES</h1>            
+        </div>
 
         <div class="section">
             <div class="container">
+
                 <div class="row">
-                    <div id ="scroll"  class="col-md-12">
-                        <table class="table table-hover table-striped">
+                    <div class="col-md-12">
+
+                        <table data-url="inicio.php" data-toggle="table"  data-pagination="true" data-search="true"  data-height="400"  data-show-refresh="true" data-show-toggle="true" >
                             <thead>
                                 <tr>
-                                    <th># Solicitud</th>
-                                    <th>Nombre&nbsp;</th>
-                                    <th>Fecha Inicio</th>
-                                    <th>Fecha Final</th>
-                                    <th>Estado</th>
-                                    <th>Ver</th>
+                                    <th data-field="id" data-align="left" data-sortable="true"># Solicitud</th>
+                                    <th >Nombre</th>
+                                    <th data-align="left" data-sortable="true">Fecha Inicio</th>
+                                    <th data-align="left" data-sortable="true">Fecha Fin</th>
+                                    <th data-align="center" data-sortable="true">Estado</th>
+                                    <th >Ver</th>
+
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
-                                while ($row = $result->fetch_array()) {
-                                    echo"<tr>"
-                                    . "<td>" . $row['IdSolicitud'] . "</td>
+<?php
+while ($row = $result->fetch_array()) {
+    echo"<tr>"
+    . "<td>" . $row['IdSolicitud'] . "</td>
                                     <td>" . $row['Solicitud'] . "</td>
                                     <td>" . $row['FechaInicio'] . "</td>
                                     <td>" . $row['FechaFin'] . "</td>";
-                                    echo "<td>";
-                                    if ($row['Proceso'] == 'Abierto') {
-                                        echo "<span class='label label-primary'>Abierto</span>";
-                                    }
-                                    if ($row['Proceso'] == 'Cancelado') {
-                                        echo "<span class='label label-danger'>Cancelado</span>";
-                                    }
-                                    if ($row['Proceso'] == 'Cerrado') {
-                                        echo "<span class='label label-default'>Cerrado</span>";
-                                    }
-                                    if ($row['Proceso'] == 'Proceso') {
-                                        echo "<span class='label label-success'>Proceso</span>";
-                                    }
-                                    ?>
+    $resultEstado = $mysqli->query("SELECT * FROM SolicitudProceso WHERE IdSolicitud =" . $row['IdSolicitud'] . " ORDER BY solicitudproceso.FechaCreacion DESC LIMIT 1");
+    if ($rowEstado = $resultEstado->fetch_array()) {
+        echo "<td>";
+        if ($rowEstado['Proceso'] == 'Abierto') {
+            echo "<span class='label label-primary'>Abierto</span>";
+        }
+        if ($rowEstado['Proceso'] == 'Cancelado') {
+            echo "<span class='label label-danger'>Cancelado</span>";
+        }
+        if ($rowEstado['Proceso'] == 'Cerrado') {
+            echo "<span class='label label-default'>Cerrado</span>";
+        }
+        if ($rowEstado['Proceso'] == 'Proceso') {
+            echo "<span class='label label-success'>Proceso</span>";
+        }
+        if ($rowEstado['Proceso'] == 'ProcesoSistemas') {
+            echo "<span class='label label-success'>Proceso Sistemas</span>";
+        }
+        if ($rowEstado['Proceso'] == 'Resuelto') {
+            echo "<span class='label label-warning'>Resuelto</span>";
+        }
+    }
+    ?>
                                     </td>
                                 <td>
-                                    <button type=button' class='btn btn-default' data-toggle='modal' data-target='#myModal' onclick="InfoSoli(<?php echo $row['IdSolicitud']; ?>);">
+                                    <button type=button' class='btn btn-default' data-toggle='modal'  href="#stack1" onclick="InfoSoli(<?php echo $row['IdSolicitud']; ?>);" >
                                         <i class='fa fa-eye fa-fw fa-lg'></i>
                                     </button>
                                 </td>
-                                <!--data-target='#myModal'-->
-                                <?php
-                            }
-                            ?>
-
-<!--                                        <span class="label label-warning">Resuelto</span>-->
-          <!--<span class="label label-success">Proceso</span>-->
-         <!--<span class="label label-default">Cerrado</span>-->
-         <!--<span class="label label-danger">Cancelado</span>-->
-          <!--<span class="label label-primary">Abierto</span>-->
-
-
-
-<!--                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>July 21, 1983 01:15:00</td>
-                                    <td>@fat</td>
-                                    <td>
-                                        <span class="label label-success">Proceso</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-                                            <i class="fa fa-eye fa-fw fa-lg"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>July 21, 1983 01:15:00</td>
-                                    <td>@fat</td>
-                                    <td>
-                                        <span class="label label-default">Cerrado</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-                                            <i class="fa fa-eye fa-fw fa-lg"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>July 21, 1983 01:15:00</td>
-                                    <td>@fat</td>
-                                    <td>
-                                        <span class="label label-danger">Cancelado</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-                                            <i class="fa fa-eye fa-fw fa-lg"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>July 21, 1983 01:15:00</td>
-                                    <td>@fat</td>
-                                    <td>
-                                        <span class="label label-success">Proceso Sis</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-                                            <i class="fa fa-eye fa-fw fa-lg"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Jacob</td>
-                                    <td>July 21, 1983 01:15:00</td>
-                                    <td>@fat</td>
-                                    <td>
-                                        <span class="label label-primary">Abierto</span>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-                                            <i class="fa fa-eye fa-fw fa-lg"></i>
-                                        </button>
-                                    </td>
-                                </tr>-->
-                            </tbody>
+    <?php
+}
+?>
                         </table>
+
+
                     </div>
                 </div>
             </div>
         </div>
 
     </body>
-    <?php
-    include 'pie.php';
-    ?>
+<?php
+include 'pie.php';
+?>
+
+    <script src="js/bootstrap-table.js" type="text/javascript"></script>
+    <script src="js/bootstrap-table-es-MX.js" type="text/javascript"></script>
+    <link href="css/bootstrap-table.css" rel="stylesheet" type="text/css"/>
 </html>

@@ -7,9 +7,8 @@ $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdSolicitud = " . $IdSol
 $result2 = $mysqli->query("SELECT * FROM SolicitudProceso WHERE IdSolicitud = " . $IdSolicitud);
 $general = $result->fetch_array();
 ?>
-
 <script src="js/OntelJS.js" type="text/javascript"></script>
-
+<!--POPPUP INFORMACION-->
 <div class="modal-body">
     <form class="form-horizontal" role="form">
         <div class="form-group has-feedback">
@@ -88,35 +87,63 @@ $general = $result->fetch_array();
             <tr>
                 <th>#</th>
                 <th>Proceso</th>
-                <th>Fecha Creacion</th>
+                <th>Fecha Creación</th>
                 <th>Observación</th>
             </tr>
         </thead>
     </table>
     <div class="modal-footer">
-        <a class="btn btn-default" onclick="emerCancelar();
-           ">Cancelar Solicitud</a>
-        <a class="btn btn-primary">Siguiente Proceso</a>
+        <a class="btn btn-default" data-toggle="modal" data-target="#Cancelacion">Cancelar Solicitud</a>
+        <a  class="btn btn-primary" data-toggle="modal" data-target="#proceso">Siguiente Proceso</a>
     </div>
 </div>
+<!--POPPUP INFORMACION-->
+
 <!--POPPUP DE VALIDACION CANCELACION-->
-<div id ="emerSeg" class="modal fade" >
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onclick="NoEmerCancelar();">×</button>
-                <h4 class="modal-title">¿ Esta seguro que desea cancelar la solicitud ?</h4>
-            </div>
-            <div class="modal-body">
-                <p>La solicitud  numero :  ### 
-                    <br> Sera cancelada y no seguira con el soporte.
-                </p>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-default" data-dismiss="modal" onclick="NoEmerCancelar();">No</a>
-                <a class="btn btn-primary">Si</a><!--ACCION PARA CANCELAR-->
-            </div>
+<div id="Cancelacion" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" >×</button>
+            <h4 class="modal-title">¿ Esta seguro que desea cancelar la solicitud ?</h4>
+        </div>
+        <div class="modal-body">
+            <p>La solicitud  numero :  <?php echo $general['IdSolicitud']; ?>
+                <br> Sera cancelada y no seguira con el soporte.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a class="btn btn-default" data-dismiss="modal" >No</a>
+            <a class="btn btn-primary" data-toggle="modal" >Si</a>
         </div>
     </div>
 </div>
 <!--POPPUP DE VALIDACION CANCELACION-->
+
+ <!--POPPUO DE SIGUIENTE ESTADO-->
+<div id="proceso" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
+    <div class="modal-content">
+       
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h2 class="modal-title"><b>Siguiente Proceso</b></h2>
+        </div>
+        <div class="modal-body">
+            <div class="col-sm-2 col-md-12">
+                <h4>Observaciones al siguien proceso</h4>
+            </div>
+            <textarea class="form-control input-sm " type="textarea" id="message"
+                      placeholder="Observaciones del la solicitud en el proceso" maxlength="250" rows="7"></textarea>
+            <select class="form-control">
+                <option value="0" selected="">Seleccione el proceso</option>
+                
+                <option value="1" >Abierto</option>
+                <option value="2"></option>
+            </select>
+            <div class="modal-footer">
+                <a class="btn btn-default" data-dismiss="modal">Close</a>
+                <a class="btn btn-primary">Save changes</a>
+            </div>
+        </div>
+    </div>
+</div>
+ <!--POPPUO DE SIGUIENTE ESTADO-->

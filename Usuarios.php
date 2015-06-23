@@ -4,14 +4,21 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<html>
+<?php
+session_start();
+include 'models/access_db.php';
+?>
+<html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>Administración de usuarios</title>
         <?php include 'head.php'; ?>
     </head>   
     <body>
         <?php include 'Menu.php'; ?>
+        <?php
+        $result = $mysqli->query("SELECT * FROM Usuarios");
+        ?>
         <div class="section">           
             <h1 id ="titulo" class="text-center">ADMINISTRACIÓN DE USUARIOS</h1>            
         </div>
@@ -20,94 +27,6 @@ and open the template in the editor.
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form id="" action="" method="post"  role="form" class="form-horizontal" >
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label">Email</label>
-                                </div>
-                                <div class="col-sm-10">
-                                    <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label">Nombres</label>
-                                </div>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputEmail3" placeholder="Nombres">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label">Apellidos</label>
-                                </div>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="inputEmail3" placeholder="Apellidos">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label">Rol</label>
-                                </div>
-                                <div class="col-sm-10">
-
-                                    <a class="active btn btn-default dropdown-toggle" data-toggle="dropdown" style="
-                                       width: 100%;"> Roles <span class="fa fa-caret-down"></span></a>
-                                    <ul class="dropdown-menu" role="menu" style="
-                                        width: 100%;
-                                        ">
-                                        <li>
-                                            <a href="#">Action</a>
-                                        </li>
-
-                                        <li class="divider"></li>
-                                    </ul>
-
-                                </div>
-
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label">Grupo</label>
-                                </div>
-                                <div class="col-sm-10">
-
-                                    <a class="active btn btn-default dropdown-toggle" data-toggle="dropdown" style="
-                                       width: 100%;"> Grupos <span class="fa fa-caret-down"></span></a>
-                                    <ul class="dropdown-menu" role="menu" style="
-                                        width: 100%;
-                                        ">
-                                        <li>
-                                            <a href="#">Action</a>
-                                        </li>
-
-                                        <li class="divider"></li>
-                                    </ul>
-
-                                </div>
-
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="inputPassword3" class="control-label">Contraseña</label>
-                                </div>
-                                <div class="col-sm-10">
-                                    <input type="password" class="form-control" id="inputPassword3" placeholder="Contraseña">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="col-sm-2">
-                                    <label for="inputPassword3" class="control-label">Confirmar Contraseña</label>
-                                </div>
-                                <div class="col-sm-10">
-                                    <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-                                </div>
-                            </div>
-
-                        </form>                        
-                        <div class="modal-footer">
-                            <a class="btn btn-primary" onclick="emerCancelar();">Modificar Usuario</a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -134,7 +53,6 @@ and open the template in the editor.
             </div>
         </div>
         <!--POPPUP  CONFIRMACION MODIFICAR-->
-
         <div class="container">
             <div class="row">
                 <div class="col-md-10 col-md-offset-1">
@@ -145,7 +63,7 @@ and open the template in the editor.
                                     <a href="#" class="active" id="login-form-link">Usuarios</a>
                                 </div>
                                 <div class="col-xs-6">
-                                    <a href="#" id="register-form-link">Register</a>
+                                    <a href="#" id="register-form-link">Registrar</a>
                                 </div>
                             </div>
                             <hr>
@@ -153,7 +71,7 @@ and open the template in the editor.
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <form id="login-form" action="" method="post" role="form" style="display: block;">
+                                    <div id="login-form" role="form" style="display: block;">
                                         <table class="table table-hover table-striped">
                                             <thead>
                                                 <tr>
@@ -166,38 +84,33 @@ and open the template in the editor.
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>2@.com</td>
-                                                    <td>Jacob</td>
-                                                    <td>Thornton</td>
-                                                    <td>@fat</td>
-                                                    <td>
-                                                        <span class="label label-info">Activo</span>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-                                                            <i class="fa fa-eye fa-fw fa-lg"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>1@.com</td>
-                                                    <td>Jacoba</td>
-                                                    <td>VelaKosf</td>
-                                                    <td>@fat</td>
-                                                    <td>
-                                                        <span class="label label-danger">Inactivo</span>
-                                                    </td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal">
-                                                            <i class="fa fa-eye fa-fw fa-lg"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                                <?php while ($row = $result->fetch_array()) { ?>
+                                                    <tr>
+                                                        <td><?php echo $row['Login']; ?></td>
+                                                        <td><?php echo $row['Nombres']; ?></td>
+                                                        <td><?php echo $row['Apellidos']; ?></td>
+                                                        <td><?php echo $row['Password']; ?></td>
+                                                        <td>
+                                                            <?php if ($row['Estado'] == 1) { ?>
+                                                                <span class="label label-info">Activo</span>
+                                                            <?php } else {
+                                                                ?>
+                                                                <span class="label label-danger">Inactivo</span>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" onclick="InfoUsuario(<?php echo $row['IdUsuario']; ?>);">
+                                                                <i class="fa fa-eye fa-fw fa-lg"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                <?php } ?>                                       
 
                                             </tbody>
                                         </table>
-                                    </form>
+                                    </div>
                                     <form id="register-form" clas ="form-horizontal" action="" method="post" role="form" style="display: none;">
                                         <div class="form-group">
                                             <div class="col-sm-2">
