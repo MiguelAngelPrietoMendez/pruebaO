@@ -1,5 +1,5 @@
 <?php
-
+$a="123";
 session_start();
 include 'access_db.php';
 
