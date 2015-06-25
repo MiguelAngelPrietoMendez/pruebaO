@@ -25,10 +25,10 @@ if (!isset($_SESSION['IdUsuario'])) {
                             <?php
                             $nTickect = 0;
                             if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == "Administrador") {
-                                $resultTickects = $mysqli->query("SELECT * FROM Solicitud WHERE  Estado = 1 AND FechaFin IS NULL");
+                                $resultTickects = $mysqli->query("SELECT * FROM Solicitud WHERE  FechaFin IS NULL ");
                             } else
                             if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == "Usuario") {
-                                $resultTickects = $mysqli->query("SELECT * FROM Solicitud WHERE  Estado = 1 AND IdUsuario = " . $_SESSION['IdUsuario'] . " AND FechaFin IS NULL");
+                                $resultTickects = $mysqli->query("SELECT * FROM Solicitud WHERE  IdUsuario = " . $_SESSION['IdUsuario'] . " AND FechaFin IS NULL");
                             }
                             $nRow = $resultTickects->num_rows;
                             if ($nRow > 0) {

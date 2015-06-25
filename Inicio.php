@@ -6,7 +6,6 @@ include 'models/access_db.php';
     <?php
     include 'head.php';
     ?>  
-
     <script>
         $(document).ready(function ()
         {
@@ -34,7 +33,7 @@ if (isset($_GET['IdUsuario'])) {
             if (isset($_POST['ticket'])) { // Valida si es por buscador
                 $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdSolicitud=" . $_POST['ticket']);
             } else {
-                $result = $mysqli->query("SELECT * FROM Solicitud");
+                $result = $mysqli->query("SELECT * FROM Solicitud ORDER BY IdSolicitud DESC");
             }
         } else {//Valida permisos usuario
             if (isset($_POST['ticket'])) {// Valida si es por buscador

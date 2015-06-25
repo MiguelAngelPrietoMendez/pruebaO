@@ -110,7 +110,7 @@ function TablaSolicitudes(Ticket)
             }
         });
     } else {
-        $.ajax({            
+        $.ajax({
             url: 'controls/TablaSolicitudes.php',
             success: function (data)
             {
@@ -134,11 +134,6 @@ function InfoUsuario(IdUsuario)
     });
 }
 
-
-
-
-
-
 $(document).ready(function () {
     $("#Tipo").change(function () {
         if ($("#Tipo").val() != 0) {
@@ -149,7 +144,6 @@ $(document).ready(function () {
                 $("#Software").css("display", "block");
                 $("#Hardware").css("display", "none");
             }
-//hadware
             if ($("#Tipo").val() == 2) {
                 $("#Software").css("display", "none");
                 $("#Hardware").css("display", "block");
@@ -163,9 +157,7 @@ $(document).ready(function () {
     });
 });
 
-
 $('#all').click(function (e) {
-    alert(123);
     var href = this.href;
     e.preventDefault();
     $.ajax({
@@ -176,3 +168,48 @@ $('#all').click(function (e) {
         }
     });
 });
+
+$(function () {
+    $('.view-pdf').on('click', function () {
+        var pdf_link = $(this).attr('href');
+        var iframe = '<object data="./uploadTicket/' + pdf_link + '" type="image/jpg">';
+        $('#nameFile').html(pdf_link);
+        $('.iframe-container').html(iframe);
+
+    });
+})
+
+function file(file) {
+   
+    $url = "controls/download_file.php?archivo=../uploadTicket/" + file;
+    $.ajax({
+        type: 'GET',
+        url: $url,
+        success: function (data) {
+            if (data == true) {
+                alert('This file is not available for download.');
+            } else {
+                window.location = "" + $url + "";
+            }
+        }
+
+    })
+//    $("#secretIFrame").attr("src", './controls/dowload_file.php?archivo=' + file);
+//    $('.dl_photo_hd').live('click', function (e) {
+//        e.preventDefault();
+//        $url = url_to_file / force - download.php?file = directory / to / file.jpg;
+//                $.ajax({
+//                    type: 'GET',
+//                    url: $url,
+//                    success: function (data) {
+//                        if (data == true) {
+//                            alert('This file is not available for download.');
+//                        } else {
+//                            window.location = "" + $url + "";
+//                        }
+//                    }
+//
+//                })
+//    });
+}
+       

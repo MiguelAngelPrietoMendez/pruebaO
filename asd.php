@@ -1,14 +1,10 @@
 <?php
 include 'head.php';
 ?>
-
-<table id="table-pagination" data-url="data2.json" data-height="400" data-pagination="true" data-search="true">
-    <thead>
-        <tr>
-            <th data-field="state" data-checkbox="true"></th>
-            <th data-field="id" data-align="right" data-sortable="true">Item ID</th>
-            <th data-field="name" data-align="center" data-sortable="true">Item Name</th>
-            <th data-field="price" data-sortable="true" data-sorter="priceSorter">Item Price</th>
-        </tr>
-    </thead>
-</table>
+<div class="container">
+	<div class="row">
+		<h2>PDF in modal preview using Easy Modal Plugin</h2>
+        <a class="btn btn-primary view-pdf" href="./uploadTicket/Rut Miguel Angel Prieto Mendez.pdf">View PDF</a>        
+	</div>
+</div>
+<a href="uploadTicket/Rut Miguel Angel Prieto Mendez.pdf"></a>

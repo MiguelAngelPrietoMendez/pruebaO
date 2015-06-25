@@ -3,7 +3,7 @@ include 'access_db.php';
 
 $IdSolicitud = $_POST['IdSolicitud'];
 //Consulta de las solicitud validando el ultimo estado
-$result = $mysqli->query("SELECT * FROM Solicitud INNER JOIN subtiposolicitud  ON Solicitud.IdSubtipoSolicitud =subtiposolicitud.IdSubtipoSolicitud WHERE Solicitud.IdSolicitud = " . $IdSolicitud);
+$result = $mysqli->query("SELECT * FROM Solicitud INNER JOIN subtiposolicitud  ON Solicitud.IdSubtipoSolicitud =subtiposolicitud.IdSubtipoSolicitud INNER JOIN usuarios ON  Solicitud.idusuario = usuarios.idusuario WHERE Solicitud.IdSolicitud = " . $IdSolicitud);
 $result2 = $mysqli->query("SELECT * FROM SolicitudProceso WHERE IdSolicitud = " . $IdSolicitud);
 $general = $result->fetch_array();
 ?>
@@ -11,24 +11,32 @@ $general = $result->fetch_array();
 <!--POPPUP INFORMACION-->
 <div class="modal-body">
     <form class="form-horizontal" role="form">
-        <div class="form-group has-feedback">
+        <div class="form-group has-feedback" style="background-color:rgb(60, 83, 83); color:white" >
             <div class="col-sm-2">
                 <label for="inputEmail3" class="control-label">#Solicitud :</label>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-1">
                 <label for="inputEmail3" class="control-label" style="font-weight: normal;
                        "><?php echo $general['IdSolicitud']; ?></label>
             </div>
             <div class="col-sm-2">
                 <label for="inputEmail3" class="control-label">Solicitud :</label>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
 
                 <label for="text" class="control-label" style="font-weight: normal;
                        "><?php echo $general['nombre']; ?></label>
             </div>
+            <div class="col-sm-2">
+                <label for="inputEmail3" class="control-label">Usuario :</label>
+            </div>
+            <div class="col-sm-2">
+
+                <label for="text" class="control-label" style="font-weight: normal;
+                       "><?php echo $general['Nombres'] . "  " . $general['Apellidos']; ?></label>
+            </div>
         </div>
-        <hr>
+
         <div class="form-group">
             <div class="col-sm-2">
                 <label for="inputEmail3" class="control-label" style='display:initial;'>Tipo Solicitud:</label>
@@ -67,7 +75,6 @@ $general = $result->fetch_array();
                 </div>
             </div>
         </div>
-
         <div class="form-group">
             <div class="col-sm-2">
                 <label for="inputEmail3" class="control-label" style='display:initial;'>Fecha Inicio:</label>
@@ -82,64 +89,136 @@ $general = $result->fetch_array();
                 <?php echo $general['FechaFin']; ?>
             </div>
         </div>
-        <div class="form-group"></div>
+        <div class="input-group">
+            <div class="col-md-12">
+                <hr>
+            </div>
+            <span class="input-group-btn">
+                <button class="btn btn-default" id ="Verifica" type="button" >
+                    <i id="icon-cambio" class="fa fa-2x fa-fw fa-angle-double-down"></i>
+                </button>
+            </span>
+        </div>
     </form>
-    <hr>
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputEmail3" class="control-label" style='display:initial;'>Fecha Inicio:</label>
-        </div>
-        <div class="col-sm-4">
-            <?php echo $general['FechaInicio']; ?>
-        </div>
-        <div class="col-sm-2">
-            <label for="inputEmail3" class="control-label"  style='display:initial;'>Fecha Fin :</label>
-        </div>
-        <div class="col-sm-4">
-            <?php echo $general['FechaFin']; ?>
-        </div>
-    </div>
-    <div class="input-group">
+    <!--PANELES DE INFORMACION GENERAL-->
+    <div class="row" id ="SolDes">
         <div class="col-md-12">
-            <hr>
+            <div class="panel with-nav-tabs panel-default">
+                <div class="panel-heading">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab1default" data-toggle="tab">Procesos</a></li>
+                        <li><a href="#tab2default" data-toggle="tab">Archivos</a></li>
+                        <!--<li><a href="#tab3default" data-toggle="tab">Default 3</a></li>-->
+                        <!--<li class="dropdown">
+                                                    <a href="#" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
+                                                    <ul class="dropdown-menu" role="menu">
+                                                        <li><a href="#tab4default" data-toggle="tab">Default 4</a></li>
+                                                        <li><a href="#tab5default" data-toggle="tab">Default 5</a></li>
+                                                    </ul>
+                       </li>-->
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="tab1default">        
+                            <table id ="SolDes" class="table table-condensed table-hover table-striped" >
+                                <tbody>
+                                    <?php
+                                    while ($row = $result2->fetch_array()) {
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $row['IdSolicitudProceso']; ?></td>
+                                            <td><?php echo $row['Proceso']; ?></td>
+                                            <td><?php echo $row['FechaCreacion']; ?></td>
+                                            <td><?php echo $row['Observacion']; ?></td>
+                                        </tr>
+                                        <?php
+                                    }
+                                    ?>           
+                                </tbody>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Proceso</th>
+                                        <th>Fecha Creación</th>
+                                        <th>Observación</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="tab-pane fade" id="tab2default">
+                            <div class="col-md-12">
+                                <ul class="media-list">
+                                    <?php
+                                    $rutas = $general['Archivos'];
+                                    $ruta = explode('|', $rutas);
+                                    $a = 1;
+                                    $cont = count($ruta);
+                                    $cont--;
+
+                                    foreach ($ruta as $value) {
+                                        if ($a <= (count($ruta) - 1)) {
+                                            $a++;
+                                            $ext = explode('.', $value);
+                                            if ($ext[1] == "pdf" && $ext[1] !== "") {
+                                                ?>
+                                                <li class="media">
+                                                    <i class="fa fa-5x fa-fw pull-left fa-file-pdf-o"></i>
+                                                    <div class="media-body">
+                                                        <h4 class="media-heading"><?php echo $ext[0]; ?></h4>
+                                                        <a class="btn btn-default download" onclick="file('<?php echo $value; ?>');"  ><i class="fa fa-2x fa-floppy-o fa-fw pull-right"></i></a>
+                                                        <a class="btn btn-default view-pdf" data-toggle="modal" data-target="#view" href="<?php echo $value; ?>"><i class="fa fa-2x fa-fw pull-right fa-binoculars"></i></a>
+                                                    </div>
+                                                </li>
+                                            <?php } elseif ($ext[1] == "xls" && $ext[1] !== "") {
+                                                ?>
+                                                <li class="media">
+                                                    <i class="fa fa-5x -pdf-o fa-fw pull-left fa-file-excel-o" ></i>
+                                                    <div class="media-body">
+                                                        <h4 class="media-heading"><?php echo $ext[0]; ?></h4>
+                                                        <a class="btn btn-default download" onclick="file('<?php echo $value; ?>');"  ><i class="fa fa-2x fa-floppy-o fa-fw pull-right"></i></a>
+                                                    </div>
+                                                </li>
+
+                                            <?php } elseif ($ext[1] == "doc" && $ext[1] !== "") { ?>
+                                                <li class="media">
+                                                    <i class="fa fa-5x fa-fw pull-left -image-o fa-file-text-o"></i>
+                                                    <div class="media-body">
+                                                        <h4 class="media-heading"><?php echo $ext[0]; ?></h4>
+                                                        <a class="btn btn-default download" onclick="file('<?php echo $value; ?>');"  ><i class="fa fa-2x fa-floppy-o fa-fw pull-right"></i></a>
+                                                    </div>
+                                                </li>
+                                            <?php } elseif ($ext[1] == "png" || $ext[1] == "jpg" || $ext[1] == "gif" && $ext[1] !== "") { ?>
+                                                <li class="media">
+                                                    <i class="fa fa-5x fa-fw  pull-left fa-file-image-o"></i>
+                                                    <div class="media-body">
+                                                        <h4 class="media-heading"><?php echo $ext[0]; ?></h4>
+                                                        <a class="btn btn-default download" onclick="file('<?php echo $value; ?>');"  ><i class="fa fa-2x fa-floppy-o fa-fw pull-right"></i></a>
+                                                        <a class="btn btn-default view-pdf" data-toggle="modal" data-target="#view" href="<?php echo $value; ?>"><i class="fa fa-2x fa-fw pull-right fa-binoculars"></i></a>
+
+                                                    </div>
+                                                </li>
+                                                <?php
+                                            }
+                                        }
+                                    }
+                                    ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <span class="input-group-btn">
-            <button class="btn btn-default" id ="Verifica" type="button" >
-                <i id="icon-cambio" class="fa fa-2x fa-fw fa-angle-double-down"></i>
-            </button>
-        </span>
-    </div>
-    <table id ="SolDes" class="table table-condensed table-hover table-striped" >
-        <tbody>
-            <?php
-            while ($row = $result2->fetch_array()) {
-                ?>
-                <tr>
-                    <td><?php echo $row['IdSolicitudProceso']; ?></td>
-                    <td><?php echo $row['Proceso']; ?></td>
-                    <td><?php echo $row['FechaCreacion']; ?></td>
-                    <td><?php echo $row['Observacion']; ?></td>
-                </tr>
-                <?php
-            }
-            ?>           
-        </tbody>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Proceso</th>
-                <th>Fecha Creación</th>
-                <th>Observación</th>
-            </tr>
-        </thead>
-    </table>
-    <div class="modal-footer">
-        <a class="btn btn-default" data-toggle="modal" data-target="#Cancelacion">Cancelar Solicitud</a>
-        <a  class="btn btn-primary" data-toggle="modal" data-target="#proceso">Siguiente Proceso</a>
     </div>
 </div>
+<!--PANELES DE INFORMACION GENERAL-->
 <!--POPPUP INFORMACION-->
 
+<div class="modal-footer">
+    <a class="btn btn-default" data-toggle="modal" data-target="#Cancelacion">Cancelar Solicitud</a>
+    <a  class="btn btn-primary" data-toggle="modal" data-target="#proceso">Siguiente Proceso</a>
+</div>
 <!--POPPUP DE VALIDACION CANCELACION-->
 <div id="Cancelacion" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
     <div class="modal-content">
@@ -159,11 +238,9 @@ $general = $result->fetch_array();
     </div>
 </div>
 <!--POPPUP DE VALIDACION CANCELACION-->
-
 <!--POPPUO DE SIGUIENTE ESTADO-->
 <div id="proceso" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
     <div class="modal-content">
-
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h2 class="modal-title"><b>Siguiente Proceso</b></h2>
@@ -182,9 +259,29 @@ $general = $result->fetch_array();
             </select>
             <div class="modal-footer">
                 <a class="btn btn-default" data-dismiss="modal">Close</a>
-                <a class="btn btn-primary">Save changes</a>
+                <a class="btn btn-primary">Confirmar</a>
             </div>
         </div>
     </div>
 </div>
 <!--POPPUO DE SIGUIENTE ESTADO-->
+<!--TAB VISUALIDAR  DE ARCHIVOS-->
+
+<!--TAB VISUALIDAR  DE ARCHIVOS-->
+<!--VER ARCHIVOS-->
+<div id="view" class="modal fade" tabindex="-1" data-focus-on="input:first"  style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 id="nameFile" class="modal-title" ></h4>
+        </div>
+        <div class="modal-body" style="max-height: 420px;overflow-y: auto;">
+            <div class="iframe-container" id="framefile"></iframe></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
+        </div>
+    </div>
+</div>
+<!--VER ARCHIVOS-->
+<iframe id="secretIFrame" src="" style="display:none; visibility:hidden;"></iframe>

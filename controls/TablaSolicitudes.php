@@ -6,6 +6,7 @@ include 'models/access_db.php';
 <script src="js/bootstrap.min.js" type="text/javascript"></script>
 <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <link href="css/OntealStyle.css" rel="stylesheet" type="text/css"/>
+
 <?php
 //Consulta de las solicitud  G
 if ($_SESSION['Rol'] == "Administrador") { //Valida Permisos Administrador
