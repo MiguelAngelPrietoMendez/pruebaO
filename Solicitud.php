@@ -14,7 +14,7 @@
 
 
     </head>  
-
+   
     <body>
         <?php
         include 'Menu.php';
@@ -52,7 +52,7 @@
                                     <label for="inputEmail3" class="control-label">Tipo de la Solicitud</label>
                                 </div>
                                 <div class="col-sm-10">
-                                    <select class="form-control"  Id="Tipo" class="required">
+                                    <select name="selType" class="form-control"  Id="Tipo" class="required">
                                         <option value="0" selected="">Seleccionar un tipo de solicitud</option>
                                         <option value="1">Software</option>
                                         <option value="2">Hardware</option>
@@ -134,15 +134,7 @@
 
 
         </div>
-        <table id="table-pagination" data-toggle="table" data-url="newjson.json" data-cache="false" data-height="299" data-height="400" data-pagination="true" data-search="true">
-            <thead>
-                <tr>
-                    <th data-field="id">Item ID</th>
-                    <th data-field="name">Item Name</th>
-                    <th data-field="price">Item Price</th>
-                </tr>
-            </thead>
-        </table>
+        
         <script>
             $("#input-700").fileinput({
                 language: "es",

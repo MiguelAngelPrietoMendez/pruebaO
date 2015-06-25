@@ -19,8 +19,10 @@ if ($result = $mysqli->query("SELECT * FROM Usuarios WHERE Login='" . $itUsuario
                 //Buscar permisos del usuario que esta creando sesion
                 $resultPermisos = $mysqli->query("SELECT * FROM UsuarioRol WHERE IdUsuario = " . $row['IdUsuario']);
                 $RowPermisos = $resultPermisos->num_rows;
-                if ($RowPermisos > 0) {
-                    if ($RowValor = mysqli_fetch_array($resultPermisos)) {
+                if ($RowPermisos > 0)
+                {
+                    if ($RowValor = mysqli_fetch_array($resultPermisos))
+                    {
                         $_SESSION['Rol'] = $RowValor['Rol'];
                        
                     }
