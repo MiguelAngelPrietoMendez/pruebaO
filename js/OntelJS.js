@@ -187,7 +187,7 @@ function file(file) {
         url: $url,
         success: function (data) {
             if (data == true) {
-                alert('This file is not available for download.');
+                alert('El archivo no se encuentra disponible \n Comuniquese con su administrador.');
             } else {
                 window.location = "" + $url + "";
             }
