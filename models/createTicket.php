@@ -15,7 +15,7 @@ if (isset($_POST["selApplicationHard"]) && $_POST["selApplicationHard"] > 0 && $
     $selApplication = $_POST["selApplicationHard"];
     echo "HARD: " . $selApplication . " - " . $_POST["selApplicationHard"];
 }
-
+ 
 $file = "";
 $count = 0;
 $date = date("Y m d H i s");
