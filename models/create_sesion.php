@@ -31,7 +31,7 @@ if ($result = $mysqli->query("SELECT * FROM Usuarios WHERE Login='" . $itUsuario
             $result->close();
             $result2->close();
             $resultPermisos->close();
-            header("Location: ../inicio.php?IdUsuario=" . $_SESSION['IdUsuario']);
+            header("Location: ../inicio.php");
         } else {
             $result->close();
             $result2->close();

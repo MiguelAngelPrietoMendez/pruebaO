@@ -14,7 +14,6 @@ if (isset($_POST["selTypeProcess"])) {
 }
 $sTypeProcess = "";
 switch ($selTypeProcess) {
-
     case 1:
         $sTypeProcess = "Abierto";
         break;
@@ -46,6 +45,7 @@ switch ($selTypeProcess) {
         }
         break;
 }
+
 $result = $mysqli->query("INSERT INTO solicitudproceso (IdSolicitud,Proceso,Observacion,IdUsuario)VALUES(" . $IdSolicitud . ",'" . $sTypeProcess . "','" . $taDescriptionProcess . "'," . $_SESSION['IdUsuario'] . ")");
 if ($result) {
     //Proceso actualizado exitosamente

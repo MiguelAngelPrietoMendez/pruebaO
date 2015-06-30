@@ -37,7 +37,7 @@ $general = $result->fetch_array();
                        "><?php echo $general['Nombres'] . "  " . $general['Apellidos']; ?></label>
             </div>
         </div>
-
+        4
         <div class="form-group">
             <div class="col-sm-2">
                 <label for="inputEmail3" class="control-label" style='display:initial;'>Tipo Solicitud:</label>
@@ -125,7 +125,6 @@ $general = $result->fetch_array();
                                             <td><?php echo $row['FechaCreacion']; ?></td>
                                             <td><?php echo $row['Observacion']; ?></td>
                                         </tr>
-
                                         <?php
                                         $ultimoProceso = $row['Proceso'];
                                     }
@@ -207,18 +206,36 @@ $general = $result->fetch_array();
     </div>
 </div>
 <div class="modal-footer">
-    <a class="btn btn-default" <?php
-    if ($ultimoProceso == 'Resuelto' || $ultimoProceso == 'Cerrado' || $ultimoProceso == 'Cancelado') {
-        echo 'style="display:none;"';
+    <?php
+    if ($ultimoProceso != 'Cerrado' && $ultimoProceso != 'Cancelado') {
+        switch ($ultimoProceso) {
+            case 'Abierto':
+                if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
+                    echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
+                }
+                break;
+            case 'Proceso':
+                if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
+                    echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
+                }
+                break;
+            case 'ProcesoSistemas':
+                if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Adminsitrador') {
+                    echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
+                }
+                break;
+            case 'Resulto':
+                if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
+                    echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
+                }
+                break;
+        }
+        echo '<a class="btn btn-default" data-toggle="modal" data-target="#Cancelacion">Cancelar Solicitud</a>';
     }
-    ?>data-toggle="modal" data-target="#Cancelacion">Cancelar Solicitud</a>
-    <a  class="btn btn-primary" <?php
-    if ($ultimoProceso == 'Resuelto' || $ultimoProceso == 'Cerrado' || $ultimoProceso == 'Cancelado') {
-        echo 'style="display:none;"';
-    }
-    ?> data-toggle="modal" data-target="#proceso">Siguiente Proceso</a>
+    ?>
 </div>
 <!--PANELES DE INFORMACION GENERAL-->
+
 <!--POPPUP DE VALIDACION CANCELACION-->
 <div id="Cancelacion" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
     <div class="modal-content">
@@ -239,7 +256,6 @@ $general = $result->fetch_array();
 </div>
 <!--POPPUP DE VALIDACION CANCELACION-->
 
-
 <!--POPPUp DE SIGUIENTE ESTADO O PROCESO-->
 <div id="proceso" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
     <div class="modal-content">
@@ -247,38 +263,54 @@ $general = $result->fetch_array();
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
             <h2 class="modal-title"><b>Siguiente Proceso</b></h2>
         </div>
-        <div class="modal-body">
+        <div class="modal-body">              
             <div class="col-sm-2 col-md-12">
                 <h4>Observaciones al siguien proceso</h4>
             </div>
             <form class="form-horizontal" role="form" id="FormSolicitud" method="POST" action="models/createProceso.php" enctype="multipart/form-data">
-
                 <textarea name="taDescriptionProcess" class="form-control input-sm " type="textarea" id="message"
                           placeholder="Observaciones del la solicitud en el proceso" maxlength="250" rows="7" required></textarea>
-                <select  name="selTypeProcess" class="form-control">
-                    <option value="0" selected="">Seleccione el proceso</option>
-                    <!--ADMINISTRADOR TODOS LOS ROLRES USUARIOS ESPECIFICOS-->
-                    
-                    <?php if ($_SESSION['Rol'] == 'Administrador') {
-                        ?>
-                        <option value="1">Abierto</option>
-                        <option value="2">ProcesoSistemas</option>
-                        <option value="3">Proceso</option>
-                        <option value="4">Resuelto</option>
-                        <option value="5">Cerrado</option>
-                        <option value="6">Cancelado</option>
+                          <?php
+                          switch ($ultimoProceso) {
+                              case 'Abierto':
+                                  if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
+                                      echo ' <input type="hidden" name="selTypeProcess" value="2"/>';
+                                  }
+                                  break;
+                              case 'Proceso':
+                                  if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
+                                      ?>
+                            <select name = "selTypeProcess" class = "form-control">
+                                <option value = "0" selected = "" >Seleccione el proceso</option>
+                                <option value = "2">Proceso Sistemas</option>
+                                <option value = "5">Cerrado</option>
+                            </select>
+                            <?php
+                        }
+                        break;
+                    case 'ProcesoSistemas':
+                        if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Adminsitrador') {
+                            ?>
+                            <select name = "selTypeProcess" class = "form-control">
+                                <option value = "0" selected = "" >Seleccione el proceso</option>
+                                <option value = "3">Proceso</option>
+                                <option value = "4">Resuelto</option>
+                            </select>
+                            <?php
+                        }
+                        break;
+                    case 'Resulto':
+                        if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
+                            ?>
+                            <select name = "selTypeProcess" class = "form-control">
+                                <option value = "0" selected = "" >Seleccione el proceso</option>
+                                <option value = "2">Proceso Sistemas</option>
+                                <option value = "5">Cerrado</option>
+                            </select>
                         <?php
-                    } elseif ($_SESSION['Rol'] == 'Usuario') {
-                        ?>
-                        <option value="1">Abierto</option>
-                        <option value="2">ProcesoSistemas</option>
-                        <option value="4">Resuelto</option>
-                        <option value="6">Cancelado</option>
-                        <?php
-                    }
-                    ?>
-
-                </select>
+                        }
+                        break;
+                }?>
                 <input type="hidden" name="IdSolicitud" value="<?php echo $IdSolicitud; ?>" />
                 <div class="modal-footer">
                     <a class="btn btn-default" data-dismiss="modal">Cancelar</a>

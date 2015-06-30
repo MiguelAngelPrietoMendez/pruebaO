@@ -12,15 +12,18 @@ $obj = new Logger();
         $(document).ready(function ()
         {
 <?php
-if (isset($_GET['IdUsuario'])) {
-    $IdUsuario = $mysqli->real_escape_string($_GET["IdUsuario"]);
-    $result = $mysqli->query("SELECT * FROM Usuarios WHERE IdUsuario=" . $IdUsuario);
-    if ($row = $result->fetch_array()) {
-        $sNombre = $row['Nombres'] . " " . $row['Apellidos'];
+if (!isset($_SESSION['menBienvenida'])) {
+    $_SESSION['menBienvenida'] = 1;
+    if (isset($_SESSION['IdUsuario'])) {
+        $IdUsuario = $mysqli->real_escape_string($_SESSION["IdUsuario"]);
+        $result = $mysqli->query("SELECT * FROM Usuarios WHERE IdUsuario=" . $IdUsuario);
+        if ($row = $result->fetch_array()) {
+            $sNombre = $row['Nombres'] . " " . $row['Apellidos'];
+        }
+        ?>
+                    Alert_Info("Bienvenido <?php echo $sNombre; ?>");
+        <?php
     }
-    ?>
-                Alert_Info("Bienvenido <?php echo $sNombre; ?>");
-    <?php
 }
 ?>
 
@@ -75,17 +78,13 @@ if (isset($_GET['error'])) {
         </div>
         <!--POPPUP DE INFORMACION DE LA SOLICITUD-->
         <!--POPPUO DE SIGUIENTE ESTADO-->
-
         <div class="section">           
             <h1 id ="titulo" class="text-center">SOLICITUDES</h1>            
         </div>
-
         <div class="section">
             <div class="container">
-
                 <div class="row">
                     <div class="col-md-12">
-
                         <table data-url="inicio.php" data-toggle="table"  data-pagination="true" data-search="true"  data-height="400"  data-show-refresh="true" data-show-toggle="true" >
                             <thead>
                                 <tr>
