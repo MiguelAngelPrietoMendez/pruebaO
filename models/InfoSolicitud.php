@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'access_db.php';
 
 $IdSolicitud = $_POST['IdSolicitud'];
@@ -255,15 +256,28 @@ $general = $result->fetch_array();
                 <textarea name="taDescriptionProcess" class="form-control input-sm " type="textarea" id="message"
                           placeholder="Observaciones del la solicitud en el proceso" maxlength="250" rows="7" required></textarea>
                 <select  name="selTypeProcess" class="form-control">
-                    <!--ADMINISTRADOR TODOS LOS ROLRES USUARIOS ESPECIFICOS-->
-<?php ?>
                     <option value="0" selected="">Seleccione el proceso</option>
-                    <option value="1">Abierto</option>
-                    <option value="2">ProcesoSistemas</option>
-                    <option value="3">Proceso</option>
-                    <option value="4">Resuelto</option>
-                    <option value="5">Cerrado</option>
-                    <option value="6">Cancelado</option>
+                    <!--ADMINISTRADOR TODOS LOS ROLRES USUARIOS ESPECIFICOS-->
+                    
+                    <?php if ($_SESSION['Rol'] == 'Administrador') {
+                        ?>
+                        <option value="1">Abierto</option>
+                        <option value="2">ProcesoSistemas</option>
+                        <option value="3">Proceso</option>
+                        <option value="4">Resuelto</option>
+                        <option value="5">Cerrado</option>
+                        <option value="6">Cancelado</option>
+                        <?php
+                    } elseif ($_SESSION['Rol'] == 'Usuario') {
+                        ?>
+                        <option value="1">Abierto</option>
+                        <option value="2">ProcesoSistemas</option>
+                        <option value="4">Resuelto</option>
+                        <option value="6">Cancelado</option>
+                        <?php
+                    }
+                    ?>
+
                 </select>
                 <input type="hidden" name="IdSolicitud" value="<?php echo $IdSolicitud; ?>" />
                 <div class="modal-footer">
