@@ -24,10 +24,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <form class="form-horizontal" role="form" id="FormSolicitud" method="POST" action="models/createTicket.php" enctype="multipart/form-data">
-
                             <div class="form-group">
                                 <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label" >Nombre de la Solicitud</label>
+                                    <label for="inputEmail3" class="control-label" >Nombre de la Solicitud :</label>
                                 </div>
                                 <div class="col-sm-10">
                                     <input name="itName" type="text" class="form-control " id="inputEmail3" placeholder="Solicitud" required>
@@ -36,7 +35,7 @@
 
                             <div class="form-group">
                                 <div class="col-sm-2">
-                                    <label for="inputPassword3" class="control-label">Descripción</label>
+                                    <label for="inputPassword3" class="control-label">Descripción :</label>
                                 </div>
                                 <div class="col-sm-10">
                                     <textarea name="taDescription" class="form-control input-sm " type="textarea" id="message"
@@ -49,7 +48,7 @@
 
                             <div class="form-group">
                                 <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label">Tipo de la Solicitud</label>
+                                    <label for="inputEmail3" class="control-label">Tipo de la Solicitud :</label>
                                 </div>
                                 <div class="col-sm-10">
                                     <select name="selType" class="form-control"  Id="Tipo" class="required">
@@ -62,12 +61,12 @@
                             <div class="form-group" id="Software">
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label">Sub Tipo de la Solicitud</label>
+                                    <label for="inputEmail3" class="control-label">Software :</label>
                                 </div>
 
                                 <div class="col-sm-9">
-                                    <select name="selApplicationSoft"  class="form-control" class="required">
-                                        <option value="0">Seleccionar un  sub tipo de solicitud</option>
+                                    <select id="selectSoftware" name="selApplicationSoft"  class="form-control" class="required">
+                                        <option value="0">Seleccionar un  Software</option>
                                         <optgroup label="SALUD TOTAL">
                                             <option value="1">STAR</option>
                                             <option value="2">Analisis Seg.  Pendientes</option>
@@ -96,12 +95,12 @@
                             <div class="form-group" id="Hardware">
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-2">
-                                    <label for="inputEmail3" class="control-label">Sub Tipo de la Solicitud</label>
+                                    <label for="inputEmail3" class="control-label">Hardware :</label>
                                 </div>
 
                                 <div class="col-sm-9">
-                                    <select name="selApplicationHard" class="form-control">
-                                        <option value="0" >Seleccionar un  sub tipo de solicitud</option>
+                                    <select id="selectHardware" name="selApplicationHard" class="form-control">
+                                        <option value="0" >Seleccionar un Hardware</option>
                                         <option value="17">Perifericos</option>
                                         <option value="18">Mouse</option>
                                         <option value="19">Teclado</option>

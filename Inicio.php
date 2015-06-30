@@ -1,6 +1,8 @@
 <?php
 session_start();
 include 'models/access_db.php';
+include './models/Logger.php';
+$obj = new Logger();
 ?>
 <html lang="es">
     <?php
@@ -18,6 +20,21 @@ if (isset($_GET['IdUsuario'])) {
     }
     ?>
                 Alert_Info("Bienvenido <?php echo $sNombre; ?>");
+    <?php
+}
+?>
+
+<?php
+if (isset($_GET['ok'])) {
+    ?>
+                Alert_Info("<?php echo $obj->getAccion($_GET['ok']); ?>");
+    <?php
+}
+?>
+<?php
+if (isset($_GET['error'])) {
+    ?>
+                Alert_Warning("<?php echo $obj->getError($_GET['error']); ?>");
     <?php
 }
 ?>
@@ -39,7 +56,7 @@ if (isset($_GET['IdUsuario'])) {
             if (isset($_POST['ticket'])) {// Valida si es por buscador
                 $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdSolicitud=" . $_POST['ticket'] . " AND IdUsuario = " . $_SESSION['IdUsuario']);
             } else {
-                $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdUsuario =" . $_SESSION['IdUsuario']);
+                $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdUsuario =" . $_SESSION['IdUsuario'] . " ORDER BY IdSolicitud DESC");
             }
         }
         ?>

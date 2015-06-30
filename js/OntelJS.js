@@ -137,24 +137,62 @@ function InfoUsuario(IdUsuario)
 $(document).ready(function () {
     $("#Tipo").change(function () {
         if ($("#Tipo").val() != 0) {
-            $("#btnSubmit").removeClass("disabled");
-            $("#btnSubmit").addClass("active");
             //Sofware
             if ($("#Tipo").val() == 1) {
+                if ($("#selectSoftware").val() !== 0) {
+                    $("#btnSubmit").removeClass("disabled");
+                    $("#btnSubmit").addClass("active");
+                }
+                if ($("#selectSoftware").val() == 0) {
+                    $("#btnSubmit").removeClass("active");
+                    $("#btnSubmit").addClass("disabled");
+                }
                 $("#Software").css("display", "block");
                 $("#Hardware").css("display", "none");
             }
+            //Hardware
             if ($("#Tipo").val() == 2) {
+                if ($("#selectHardware").val() !== 0) {
+                    $("#btnSubmit").removeClass("disabled");
+                    $("#btnSubmit").addClass("active");
+                }
+                if ($("#selectHardware").val() == 0) {
+                    $("#btnSubmit").removeClass("active");
+                    $("#btnSubmit").addClass("disabled");
+                }
                 $("#Software").css("display", "none");
                 $("#Hardware").css("display", "block");
             }
         } else {
+            $("#Software").css("display", "none");
+            $("#Hardware").css("display", "none");
             $("#btnSubmit").removeClass("active");
             $("#btnSubmit").addClass("disabled");
-            $("#Software").css("display", "none");
-            $("#Hadware").css("display", "none");
         }
     });
+    //Activa el boton siempre y cuando seleccione un sub tipo de solicitud de software
+    $("#selectSoftware").change(function () {
+        if ($("#selectSoftware").val() !== 0) {
+            $("#btnSubmit").removeClass("disabled");
+            $("#btnSubmit").addClass("active");
+        }
+        if ($("#selectSoftware").val() == 0) {
+            $("#btnSubmit").removeClass("active");
+            $("#btnSubmit").addClass("disabled");
+        }
+    }
+    );
+    $("#selectHardware").change(function () {
+        if ($("#selectHardware").val() !== 0) {
+            $("#btnSubmit").removeClass("disabled");
+            $("#btnSubmit").addClass("active");
+        }
+        if ($("#selectHardware").val() == 0) {
+            $("#btnSubmit").removeClass("active");
+            $("#btnSubmit").addClass("disabled");
+        }
+    }
+    );
 });
 
 $('#all').click(function (e) {
@@ -180,7 +218,7 @@ $(function () {
 })
 
 function file(file) {
-   
+
     $url = "controls/download_file.php?archivo=../uploadTicket/" + file;
     $.ajax({
         type: 'GET',
@@ -193,23 +231,6 @@ function file(file) {
             }
         }
 
-    })
-//    $("#secretIFrame").attr("src", './controls/dowload_file.php?archivo=' + file);
-//    $('.dl_photo_hd').live('click', function (e) {
-//        e.preventDefault();
-//        $url = url_to_file / force - download.php?file = directory / to / file.jpg;
-//                $.ajax({
-//                    type: 'GET',
-//                    url: $url,
-//                    success: function (data) {
-//                        if (data == true) {
-//                            alert('This file is not available for download.');
-//                        } else {
-//                            window.location = "" + $url + "";
-//                        }
-//                    }
-//
-//                })
-//    });
+    });
 }
        

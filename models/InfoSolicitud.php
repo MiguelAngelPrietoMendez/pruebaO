@@ -108,14 +108,6 @@ $general = $result->fetch_array();
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab1default" data-toggle="tab">Procesos</a></li>
                         <li><a href="#tab2default" data-toggle="tab">Archivos</a></li>
-                        <!--<li><a href="#tab3default" data-toggle="tab">Default 3</a></li>-->
-                        <!--<li class="dropdown">
-                                                    <a href="#" data-toggle="dropdown">Dropdown <span class="caret"></span></a>
-                                                    <ul class="dropdown-menu" role="menu">
-                                                        <li><a href="#tab4default" data-toggle="tab">Default 4</a></li>
-                                                        <li><a href="#tab5default" data-toggle="tab">Default 5</a></li>
-                                                    </ul>
-                       </li>-->
                     </ul>
                 </div>
                 <div class="panel-body">
@@ -132,7 +124,9 @@ $general = $result->fetch_array();
                                             <td><?php echo $row['FechaCreacion']; ?></td>
                                             <td><?php echo $row['Observacion']; ?></td>
                                         </tr>
+
                                         <?php
+                                        $ultimoProceso = $row['Proceso'];
                                     }
                                     ?>           
                                 </tbody>
@@ -155,7 +149,6 @@ $general = $result->fetch_array();
                                     $a = 1;
                                     $cont = count($ruta);
                                     $cont--;
-
                                     foreach ($ruta as $value) {
                                         if ($a <= (count($ruta) - 1)) {
                                             $a++;
@@ -212,13 +205,19 @@ $general = $result->fetch_array();
         </div>
     </div>
 </div>
-<!--PANELES DE INFORMACION GENERAL-->
-<!--POPPUP INFORMACION-->
-
 <div class="modal-footer">
-    <a class="btn btn-default" data-toggle="modal" data-target="#Cancelacion">Cancelar Solicitud</a>
-    <a  class="btn btn-primary" data-toggle="modal" data-target="#proceso">Siguiente Proceso</a>
+    <a class="btn btn-default" <?php
+    if ($ultimoProceso == 'Resuelto' || $ultimoProceso == 'Cerrado' || $ultimoProceso == 'Cancelado') {
+        echo 'style="display:none;"';
+    }
+    ?>data-toggle="modal" data-target="#Cancelacion">Cancelar Solicitud</a>
+    <a  class="btn btn-primary" <?php
+    if ($ultimoProceso == 'Resuelto' || $ultimoProceso == 'Cerrado' || $ultimoProceso == 'Cancelado') {
+        echo 'style="display:none;"';
+    }
+    ?> data-toggle="modal" data-target="#proceso">Siguiente Proceso</a>
 </div>
+<!--PANELES DE INFORMACION GENERAL-->
 <!--POPPUP DE VALIDACION CANCELACION-->
 <div id="Cancelacion" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
     <div class="modal-content">
@@ -238,7 +237,9 @@ $general = $result->fetch_array();
     </div>
 </div>
 <!--POPPUP DE VALIDACION CANCELACION-->
-<!--POPPUO DE SIGUIENTE ESTADO-->
+
+
+<!--POPPUp DE SIGUIENTE ESTADO O PROCESO-->
 <div id="proceso" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
@@ -249,18 +250,27 @@ $general = $result->fetch_array();
             <div class="col-sm-2 col-md-12">
                 <h4>Observaciones al siguien proceso</h4>
             </div>
-            <textarea class="form-control input-sm " type="textarea" id="message"
-                      placeholder="Observaciones del la solicitud en el proceso" maxlength="250" rows="7"></textarea>
-            <select class="form-control">
-                <option value="0" selected="">Seleccione el proceso</option>
+            <form class="form-horizontal" role="form" id="FormSolicitud" method="POST" action="models/createProceso.php" enctype="multipart/form-data">
 
-                <option value="1" >Abierto</option>
-                <option value="2"></option>
-            </select>
-            <div class="modal-footer">
-                <a class="btn btn-default" data-dismiss="modal">Close</a>
-                <a class="btn btn-primary">Confirmar</a>
-            </div>
+                <textarea name="taDescriptionProcess" class="form-control input-sm " type="textarea" id="message"
+                          placeholder="Observaciones del la solicitud en el proceso" maxlength="250" rows="7" required></textarea>
+                <select  name="selTypeProcess" class="form-control">
+                    <!--ADMINISTRADOR TODOS LOS ROLRES USUARIOS ESPECIFICOS-->
+<?php ?>
+                    <option value="0" selected="">Seleccione el proceso</option>
+                    <option value="1">Abierto</option>
+                    <option value="2">ProcesoSistemas</option>
+                    <option value="3">Proceso</option>
+                    <option value="4">Resuelto</option>
+                    <option value="5">Cerrado</option>
+                    <option value="6">Cancelado</option>
+                </select>
+                <input type="hidden" name="IdSolicitud" value="<?php echo $IdSolicitud; ?>" />
+                <div class="modal-footer">
+                    <a class="btn btn-default" data-dismiss="modal">Cancelar</a>
+                    <button  type="submit" class="btn btn-primary">Confirmar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

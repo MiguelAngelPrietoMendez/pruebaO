@@ -1,16 +1,16 @@
-<?php 
+<?php
 include 'access_db.php';
-
 $IdUsuario = $_POST['IdUsuario'];
 //Consulta de las solicitud validando el ultimo estado
 $result = $mysqli->query("SELECT * FROM Usuarios WHERE IdUsuario = " . $IdUsuario);
+$result2 = $mysqli->query("SELECT usuariorol.rol FROM Usuarios INNER JOIN usuariorol ON Usuarios.Idusuario = usuariorol.idusuario    WHERE IdUsuario = " . $IdUsuario);
+$permiso = $result2->fetch_array();
 $general = $result->fetch_array();
 ?>
 <!--POPPUP  DATOS-->             
 <div class="modal-body">
     <form id="" action="" method="post"  role="form" class="form-horizontal" >
         <div class="form-group">
-            <textarea></textarea>
             <div class="col-sm-2">
                 <label for="inputEmail3" class="control-label">Email</label>
             </div>
@@ -43,10 +43,8 @@ $general = $result->fetch_array();
                     <option value="0" selected>Selecciones un rol</option>
                     <option value="1">Administrador</option>
                     <option value="2">Usuario</option>
-
                 </select>
             </div>
-
         </div>
         <div class="form-group">
             <div class="col-sm-2">
