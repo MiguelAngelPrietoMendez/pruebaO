@@ -19,12 +19,21 @@ if (isset($_POST["selApplicationHard"]) && $_POST["selApplicationHard"] > 0 && $
 $file = "";
 $count = 0;
 $date = date("Y m d H i s");
-
-for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
-    if (file_exists("../uploadTicket/" . $_FILES["file"]["name"][$i])) {
-        echo $_FILES["file"]["name"][$i] . " El archivo ya existe. <BR>";
-    } else {
-        if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], "../uploadTicket/" . $_FILES["file"]["name"][$i])) {
+for ($i = 0; $i < count($_FILES["file"]["name"]); $i++)
+{
+//    if (file_exists("../uploadTicket/" . $_FILES["file"]["name"][$i])) {
+//        echo $_FILES["file"]["name"][$i] . " El archivo ya existe. <BR>";
+//    } else 
+//    {
+    
+        if($_FILES["file"]["name"][$i]==="" || empty($_FILES["file"]["name"][$i]))
+        {
+            echo "siass".$_FILES["file"]["name"][$i];
+             $count++;
+        }else
+        {
+            echo "nokas".$_FILES["file"]["name"][$i];
+            if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], "../uploadTicket/" . $_FILES["file"]["name"][$i])) {
             $path_parts = pathinfo($_FILES["file"]["name"][$i]);
             $image_path = $path_parts['filename'] . '_' . time() . '.' . $path_parts['extension'];
             echo "<BR>brebes subio en : " . "../uploadTicket/" . $_FILES["file"]["name"][$i];
@@ -34,10 +43,13 @@ for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
             $file .=$image_path . "|";
             $count++;
             echo $count;
-        } else {
+             } else {
             echo "Error subiendo el archivo \n Por favor comuniqueses con su administrador";
+             }
         }
-    }
+    
+        
+//    }
 }
 if ($count == count($_FILES["file"]["name"])) {
     $result = $mysqli->query("INSERT INTO solicitud (nombre,Descripcion,Archivos,IdUsuario,IdSubTipoSolicitud)VALUES"
@@ -60,4 +72,8 @@ if ($count == count($_FILES["file"]["name"])) {
         header("Location: ../Inicio.php?error=1");
     }
 }
+
+
+echo "<br>".count($_FILES["file"]["name"]); 
+
 ?>
