@@ -5,7 +5,6 @@ include 'access_db.php';
 //Descripcion del proceso
 $taDescriptionProcess = $mysqli->real_escape_string($_POST["taDescriptionProcess"]);
 $IdSolicitud = $mysqli->real_escape_string($_POST["IdSolicitud"]);
-echo $taDescriptionProcess;
 
 //Proceso Siguiente (Select)
 $selTypeProcess = 0;

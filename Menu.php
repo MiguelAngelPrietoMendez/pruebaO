@@ -21,7 +21,7 @@ if (!isset($_SESSION['IdUsuario'])) {
             <ul class="nav navbar-nav">
                 <li>
                     <!--ESPACIO DE NOTIFICACIONES DEPENDIENTO DEL ROL-->
-                    <a href="#"><span class="badge">
+                    <a href="inicio.php?Det=1"><span class="badge">
                             <?php
                             $nTickect = 0;
                             if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == "Administrador") {
@@ -53,13 +53,10 @@ if (!isset($_SESSION['IdUsuario'])) {
 
                             echo $nTickect;
                             ?>
-
-
-
-                        </span>Ver Ticket's</a>
+                        </span>Inicio</a>
                 </li>
                 <li>
-                    <a href="inicio.php">Inicio <span class="sr-only">(current)</span></a>
+                    <a href="inicio.php">Ver Ticket's <span class="sr-only">(current)</span></a>
                 </li>
 
                 <li>
@@ -74,18 +71,23 @@ if (!isset($_SESSION['IdUsuario'])) {
             </form>
             <ul class="nav navbar-nav navbar-right">
                 <li>
+                    <a><?php echo $_SESSION['Nombres']; ?> <span class="sr-only">(current)</span></a>
+                </li>
+                <li>
                     <a href="#">Manuales <span class="sr-only">(current)</span></a>
                 </li>
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-expanded="false">Opciones<span class="caret"></span></a>
                     <ul class="dropdown-menu" role="menu">
-                        <li>
-                            <a id="crea_usuario"  href="Usuarios.php">Crear Usuario</a>
-                        </li>
-                        <li>
-                            <a href="Usuarios.php">Modificar Usuario</a>
-                        </li>
+                        <?php if ($_SESSION['Rol'] == "Administrador") { ?>
+                            <li>
+                                <a id="crea_usuario"  href="Usuarios.php">Administración de  Usuario</a>
+                            </li>
+                        <?php }
+                        ?>
+
                         <li class="divider"></li>
                         <li>
                             <a href="index.php?Close=true">Cerrar Sesión</a>

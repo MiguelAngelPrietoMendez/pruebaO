@@ -209,6 +209,7 @@ $general = $result->fetch_array();
     <?php
     if ($ultimoProceso != 'Cerrado' && $ultimoProceso != 'Cancelado') {
         switch ($ultimoProceso) {
+            
             case 'Abierto':
                 if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
                     echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
@@ -220,11 +221,11 @@ $general = $result->fetch_array();
                 }
                 break;
             case 'ProcesoSistemas':
-                if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Adminsitrador') {
+                if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
                     echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
                 }
                 break;
-            case 'Resulto':
+            case 'Resuelto':
                 if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
                     echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
                 }
@@ -289,7 +290,7 @@ $general = $result->fetch_array();
                         }
                         break;
                     case 'ProcesoSistemas':
-                        if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Adminsitrador') {
+                        if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
                             ?>
                             <select name = "selTypeProcess" class = "form-control">
                                 <option value = "0" selected = "" >Seleccione el proceso</option>
@@ -299,7 +300,7 @@ $general = $result->fetch_array();
                             <?php
                         }
                         break;
-                    case 'Resulto':
+                    case 'Resuelto':
                         if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
                             ?>
                             <select name = "selTypeProcess" class = "form-control">
@@ -321,9 +322,7 @@ $general = $result->fetch_array();
     </div>
 </div>
 <!--POPPUO DE SIGUIENTE ESTADO-->
-<!--TAB VISUALIDAR  DE ARCHIVOS-->
 
-<!--TAB VISUALIDAR  DE ARCHIVOS-->
 <!--VER ARCHIVOS-->
 <div id="view" class="modal fade" tabindex="-1" data-focus-on="input:first"  style="display: none;">
     <div class="modal-content">
@@ -339,5 +338,6 @@ $general = $result->fetch_array();
         </div>
     </div>
 </div>
-<!--VER ARCHIVOS-->
 <iframe id="secretIFrame" src="" style="display:none; visibility:hidden;"></iframe>
+
+<!--VER ARCHIVOS-->

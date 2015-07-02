@@ -15,25 +15,22 @@ if (isset($_POST["selApplicationHard"]) && $_POST["selApplicationHard"] > 0 && $
     $selApplication = $_POST["selApplicationHard"];
     echo "HARD: " . $selApplication . " - " . $_POST["selApplicationHard"];
 }
- 
+
 $file = "";
 $count = 0;
 $date = date("Y m d H i s");
-for ($i = 0; $i < count($_FILES["file"]["name"]); $i++)
-{
+for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
 //    if (file_exists("../uploadTicket/" . $_FILES["file"]["name"][$i])) {
 //        echo $_FILES["file"]["name"][$i] . " El archivo ya existe. <BR>";
 //    } else 
 //    {
-    
-        if($_FILES["file"]["name"][$i]==="" || empty($_FILES["file"]["name"][$i]))
-        {
-            echo "siass".$_FILES["file"]["name"][$i];
-             $count++;
-        }else
-        {
-            echo "nokas".$_FILES["file"]["name"][$i];
-            if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], "../uploadTicket/" . $_FILES["file"]["name"][$i])) {
+
+    if ($_FILES["file"]["name"][$i] === "" || empty($_FILES["file"]["name"][$i])) {
+        echo "siass" . $_FILES["file"]["name"][$i];
+        $count++;
+    } else {
+        echo "nokas" . $_FILES["file"]["name"][$i];
+        if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], "../uploadTicket/" . $_FILES["file"]["name"][$i])) {
             $path_parts = pathinfo($_FILES["file"]["name"][$i]);
             $image_path = $path_parts['filename'] . '_' . time() . '.' . $path_parts['extension'];
             echo "<BR>brebes subio en : " . "../uploadTicket/" . $_FILES["file"]["name"][$i];
@@ -43,12 +40,12 @@ for ($i = 0; $i < count($_FILES["file"]["name"]); $i++)
             $file .=$image_path . "|";
             $count++;
             echo $count;
-             } else {
+        } else {
             echo "Error subiendo el archivo \n Por favor comuniqueses con su administrador";
-             }
         }
-    
-        
+    }
+
+
 //    }
 }
 if ($count == count($_FILES["file"]["name"])) {
@@ -58,13 +55,13 @@ if ($count == count($_FILES["file"]["name"])) {
         $result2 = $mysqli->query("SELECT IdSolicitud FROM solicitud ORDER BY IdSolicitud DESC LIMIT 1");
         $row2 = $result2->fetch_array();
         $IdSolicitud = $row2["IdSolicitud"];
-        $result3 = $mysqli->query("INSERT INTO solicitudproceso (IdSolicitud,Proceso,IdUsuario)VALUES(" . $IdSolicitud . ",'Abierto',".$_SESSION['IdUsuario'].")");
+        $result3 = $mysqli->query("INSERT INTO solicitudproceso (IdSolicitud,Proceso,IdUsuario)VALUES(" . $IdSolicitud . ",'Abierto'," . $_SESSION['IdUsuario'] . ")");
         if ($result3) {
             //INSERT EXITOSO
             header("Location: ../Inicio.php?ok=1");
         } else {
             echo "Error insertantod Solicidud  \n " . "INSERT INTO solicitudproceso (IdSolicitud,Proceso)VALUES(" . $IdSolicitud . ",'Abierto')";
-//            header("Location: ../Inicio.php?Error=1");
+            header("Location: ../Inicio.php?error=5");
         }
     } else {
         echo "INSERT INTO solicitud (nombre,Descripcion,Archivos,IdUsuario,IdSubTipoSolicitud)VALUES"
@@ -74,6 +71,5 @@ if ($count == count($_FILES["file"]["name"])) {
 }
 
 
-echo "<br>".count($_FILES["file"]["name"]); 
-
+echo "<br>" . count($_FILES["file"]["name"]);
 ?>

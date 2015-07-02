@@ -2,7 +2,7 @@
 session_start();
 include 'models/access_db.php';
 include './models/Logger.php';
-$obj = new Logger();
+$obj = unserialize($_SESSION['OBJ']);
 ?>
 <html lang="es">
     <?php
@@ -14,14 +14,9 @@ $obj = new Logger();
 <?php
 if (!isset($_SESSION['menBienvenida'])) {
     $_SESSION['menBienvenida'] = 1;
-    if (isset($_SESSION['IdUsuario'])) {
-        $IdUsuario = $mysqli->real_escape_string($_SESSION["IdUsuario"]);
-        $result = $mysqli->query("SELECT * FROM Usuarios WHERE IdUsuario=" . $IdUsuario);
-        if ($row = $result->fetch_array()) {
-            $sNombre = $row['Nombres'] . " " . $row['Apellidos'];
-        }
+    if (isset($_SESSION['Nombres'])) {
         ?>
-                    Alert_Info("Bienvenido <?php echo $sNombre; ?>");
+                    Alert_Info("Bienvenido <?php echo $_SESSION['Nombres']; ?>");
         <?php
     }
 }
@@ -37,7 +32,7 @@ if (isset($_GET['ok'])) {
 <?php
 if (isset($_GET['error'])) {
     ?>
-                Alert_Warning("<?php echo $obj->getError($_GET['error']); ?>");
+                Alert_Warning("<?php echo $obj->getError($_GET['error']); ?>" + "\n" + "<?php echo $obj->getUltimoError(); ?>");
     <?php
 }
 ?>
@@ -100,13 +95,63 @@ if (isset($_GET['error'])) {
                             <tbody>
                                 <?php
                                 while ($row = $result->fetch_array()) {
-                                    echo"<tr>"
-                                    . "<td>" . $row['IdSolicitud'] . "</td>
-                                    <td>" . $row['nombre'] . "</td>
-                                    <td>" . $row['FechaInicio'] . "</td>
-                                    <td>" . $row['FechaFin'] . "</td>";
                                     $resultEstado = $mysqli->query("SELECT * FROM SolicitudProceso WHERE IdSolicitud =" . $row['IdSolicitud'] . " ORDER BY solicitudproceso.FechaCreacion DESC LIMIT 1");
                                     if ($rowEstado = $resultEstado->fetch_array()) {
+                                        if (isset($_GET['Det'])) {
+                                            if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
+                                                if ($rowEstado['Proceso'] == 'Abierto' || $rowEstado['Proceso'] == 'ProcesoSistemas') {
+                                                    echo"<tr>"
+                                                    . "<td>" . $row['IdSolicitud'] . "</td>
+                                                           <td>" . $row['nombre'] . "</td>
+                                                           <td>" . $row['FechaInicio'] . "</td>
+                                                           <td>" . $row['FechaFin'] . "</td>";
+                                                    echo "<td>";
+                                                    if ($rowEstado['Proceso'] == 'Abierto') {
+                                                        echo "<span class='label label-primary'>Abierto</span>";
+                                                    }
+                                                    if ($rowEstado['Proceso'] == 'ProcesoSistemas') {
+                                                        echo "<span class='label label-success'>Proceso Sistemas</span>";
+                                                    }
+                                                    ?>
+
+                                                    </td>
+                                                <td>
+                                                    <button type=button' class='btn btn-default' data-toggle='modal'  href="#stack1" onclick="InfoSoli(<?php echo $row['IdSolicitud']; ?>);" >
+                                                        <i class='fa fa-eye fa-fw fa-lg'></i>
+                                                    </button>
+                                                </td>
+                                                <?php
+                                            }
+                                        } elseif (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
+                                            if ($rowEstado['Proceso'] == 'Proceso' || $rowEstado['Proceso'] == 'Resuelto') {
+                                                echo"<tr>"
+                                                . "<td>" . $row['IdSolicitud'] . "</td>
+                                                           <td>" . $row['nombre'] . "</td>
+                                                           <td>" . $row['FechaInicio'] . "</td>
+                                                           <td>" . $row['FechaFin'] . "</td>";
+                                                echo "<td>";
+                                                if ($rowEstado['Proceso'] == 'Proceso') {
+                                                    echo "<span class='label label-success'>Proceso</span>";
+                                                }
+                                                if ($rowEstado['Proceso'] == 'Resuelto') {
+                                                    echo "<span class='label label-warning'>Resuelto</span>";
+                                                }
+                                                ?>
+                                                </td>
+                                                <td>
+                                                    <button type=button' class='btn btn-default' data-toggle='modal'  href="#stack1" onclick="InfoSoli(<?php echo $row['IdSolicitud']; ?>);" >
+                                                        <i class='fa fa-eye fa-fw fa-lg'></i>
+                                                    </button>
+                                                </td>
+                                                <?php
+                                            }
+                                        }
+                                    } else {
+                                        echo"<tr>"
+                                        . "<td>" . $row['IdSolicitud'] . "</td>
+                                             <td>" . $row['nombre'] . "</td>
+                                             <td>" . $row['FechaInicio'] . "</td>
+                                             <td>" . $row['FechaFin'] . "</td>";
                                         echo "<td>";
                                         if ($rowEstado['Proceso'] == 'Abierto') {
                                             echo "<span class='label label-primary'>Abierto</span>";
@@ -126,15 +171,16 @@ if (isset($_GET['error'])) {
                                         if ($rowEstado['Proceso'] == 'Resuelto') {
                                             echo "<span class='label label-warning'>Resuelto</span>";
                                         }
+                                        ?>
+                                        </td>
+                                        <td>
+                                            <button type=button' class='btn btn-default' data-toggle='modal'  href="#stack1" onclick="InfoSoli(<?php echo $row['IdSolicitud']; ?>);" >
+                                                <i class='fa fa-eye fa-fw fa-lg'></i>
+                                            </button>
+                                        </td>
+                                        <?php
                                     }
-                                    ?>
-                                    </td>
-                                <td>
-                                    <button type=button' class='btn btn-default' data-toggle='modal'  href="#stack1" onclick="InfoSoli(<?php echo $row['IdSolicitud']; ?>);" >
-                                        <i class='fa fa-eye fa-fw fa-lg'></i>
-                                    </button>
-                                </td>
-                                <?php
+                                }
                             }
                             ?>
                         </table>

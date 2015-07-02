@@ -45,26 +45,26 @@ $(document).ready(function () {
 });
 function Alert_Danger(mensaje) {
     $('#area_alertas').append(' <div class="alert alert-danger" role="alert"><strong>Peligro!  </strong>' + mensaje + '</div>');
-    alertTimeout();
+    alertTimeout(2500);
 }
-
 function Alert_Success(mensaje) {
     $('#area_alertas').append(' <div  class="alert alert-success" role="alert"><strong>Exitosamente!   </strong>' + mensaje + '</div>');
-    alertTimeout();
+    alertTimeout(1500);
 }
 function Alert_Info(mensaje) {
     $('#area_alertas').append(' <div class="alert alert-info" role="alert" > <strong>Aviso!  </strong>' + mensaje + '</div>');
-    alertTimeout();
+    alertTimeout(1500);
 }
 function Alert_Warning(mensaje) {
     $('#area_alertas').append(' <div class="alert alert-warning" role="alert"><strong>Advertencia!  </strong>' + mensaje + '</div>');
-    alertTimeout();
+    alertTimeout(5500);
+
 }
 
 
-function alertTimeout() {
+function alertTimeout(tiempo) {
     window.setTimeout(function () {
-        $(".alert").fadeTo(1500, 0).slideUp(500, function () {
+        $(".alert").fadeTo(tiempo, 0).slideUp(500, function () {
             $(this).remove();
         });
     }, 1000);
@@ -193,6 +193,30 @@ $(document).ready(function () {
         }
     }
     );
+
+    $("#selTypeRol").change(function () {
+
+        if ($("#selTypeRol").val() !== 0 && $("#selTypeGroup").val() !== 0) {
+            $("#EnviarUsu").removeClass("disabled");
+            $("#EnviarUsu").addClass("active");
+        }
+        if ($("#selTypeRol").val() == 0 || $("#selTypeGroup").val() == 0) {
+            $("#EnviarUsu").removeClass("active");
+            $("#EnviarUsu").addClass("disabled");
+        }
+    }
+    );
+    $("#selTypeGroup").change(function () {
+        if ($("#selTypeRol").val() !== 0 && $("#selTypeGroup").val() !== 0) {
+            $("#EnviarUsu").removeClass("disabled");
+            $("#EnviarUsu").addClass("active");
+        }
+        if ($("#selTypeRol").val() == 0 || $("#selTypeGroup").val() == 0) {
+            $("#EnviarUsu").removeClass("active");
+            $("#EnviarUsu").addClass("disabled");
+        }
+    }
+    );
 });
 
 $('#all').click(function (e) {
@@ -205,6 +229,12 @@ $('#all').click(function (e) {
             document.location = href;  // redirect browser to link
         }
     });
+});
+$('#btnSubmitUsu').click(function (e) {
+    if ($("#selTypeGroup").val() == 0 || $("#selTypeRol").val() == 0) {
+        Alert_Danger("El Grupo y el Rol del Usuario Son obligatorios");
+        return
+    }
 });
 
 $(function () {
