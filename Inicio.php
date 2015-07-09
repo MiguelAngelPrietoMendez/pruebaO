@@ -74,13 +74,14 @@ if (isset($_GET['error'])) {
         <!--POPPUP DE INFORMACION DE LA SOLICITUD-->
         <!--POPPUO DE SIGUIENTE ESTADO-->
         <div class="section">           
-            <h1 id ="titulo" class="text-center">SOLICITUDES</h1>            
+            <h1 id ="titulo" class="text-center">SOLICITUDES</h1>    
+            
         </div>
         <div class="section">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
-                        <table data-url="inicio.php" data-toggle="table"  data-pagination="true" data-search="true"  data-height="400"  data-show-refresh="true" data-show-toggle="true" >
+                        <table data-url="inicio.php" data-toggle="table"   data-pagination="true" data-search="true"  data-height="400"  data-show-refresh="true" data-show-toggle="true" >
                             <thead>
                                 <tr>
                                     <th data-field="id" data-align="left" data-sortable="true"># Solicitud</th>
@@ -89,7 +90,6 @@ if (isset($_GET['error'])) {
                                     <th data-align="left" data-sortable="true">Fecha Fin</th>
                                     <th data-align="center" data-sortable="true">Estado</th>
                                     <th >Ver</th>
-
                                 </tr>
                             </thead>
                             <tbody>

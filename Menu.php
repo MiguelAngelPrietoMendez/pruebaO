@@ -87,7 +87,7 @@ if (!isset($_SESSION['IdUsuario'])) {
                             </li>
                         <?php }
                         ?>
-
+                        <li><a id="crea_usuario"  href="Reportes.php">Reportes</a></li>
                         <li class="divider"></li>
                         <li>
                             <a href="index.php?Close=true">Cerrar Sesión</a>

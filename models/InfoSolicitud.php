@@ -37,7 +37,7 @@ $general = $result->fetch_array();
                        "><?php echo $general['Nombres'] . "  " . $general['Apellidos']; ?></label>
             </div>
         </div>
-        4
+        
         <div class="form-group">
             <div class="col-sm-2">
                 <label for="inputEmail3" class="control-label" style='display:initial;'>Tipo Solicitud:</label>

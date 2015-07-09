@@ -1,141 +1,244 @@
 <?php
-//include 'head.php';
+include './models/access_db.php';
+$result = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad FROM acm_usuario_m_a GROUP BY IdUsuario");
 ?>
-<link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
 <script src="js/jquery-2.1.4.js" type="text/javascript"></script>
-<script src="js/validator.js" type="text/javascript"></script>
-<form data-toggle="validator" role="form">
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputName" class="control-label">Email</label>
-        </div>
-        <div class="col-sm-10">
-            <input type="email" class="form-control"  placeholder="Email" value ="" required></input>
-        </div>
-    </div>
-    <div class="form-group">
-        <label for="inputName" class="control-label">Name</label>
-        <input type="text" class="form-control" id="inputName" placeholder="Cina Saffary" required>
-    </div>
-    <div class="form-group">
-        <label for="inputTwitter" class="control-label">Twitter</label>
-        <div class="input-group">
-            <span class="input-group-addon">@</span>
-            <input type="text" pattern="^([_A-z0-9]){3,}$" maxlength="20" class="form-control" id="inputTwitter" placeholder="1000hz" required>
-        </div>
-        <span class="help-block with-errors">Up to 20 letters, numbers and underscores</span>
-    </div>
-    <div class="form-group">
-        <label for="inputEmail" class="control-label">Email</label>
-        <input type="email" class="form-control" id="inputEmail" placeholder="Email" data-error="Bruh, that email address is invalid" required>
-        <div class="help-block with-errors"></div>
-    </div>
-    <div class="form-group">
-        <label for="inputPassword" class="control-label">Password</label>
-        <div class="form-group col-sm-6">
-            <input type="password" data-minlength="6" class="form-control" id="inputPassword" placeholder="Password" required>
-            <span class="help-block">Minimum of 6 characters</span>
-        </div>
-        <div class="form-group col-sm-6">
-            <input type="password" class="form-control" id="inputPasswordConfirm" data-match="#inputPassword" data-match-error="Whoops, these don't match" placeholder="Confirm" required>
-            <div class="help-block with-errors"></div>
-        </div>
-    </div>
-</div>
- <select name="selType" class="form-control"  Id="Tipo" required>
-                                        <option value="0" selected="">Seleccionar un tipo de solicitud</option>
-                                        <option value="1">Software</option>
-                                        <option value="2">Hardware</option>
-                                    </select>
-<div class="form-group">
-    <div class="radio">
-        <label>
-            <input type="radio" name="underwear" required>
-            Boxers
-        </label>
-    </div>
-    <div class="radio">
-        <label>
-            <input type="radio" name="underwear" required>
-            Briefs
-        </label>
-    </div>
-</div>
-<div class="form-group">
-    <div class="checkbox">
-        <label>
-            <input type="checkbox" id="terms" data-error="Before you wreck yourself" required>
-            Check yourself
-        </label>
-        <div class="help-block with-errors"></div>
-    </div>
-</div>
-<div class="form-group">
-    <button type="submit" class="btn btn-primary">Submit</button>
-</div>
-</form>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/data.js"></script>
+<script src="http://code.highcharts.com/modules/drilldown.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<div id="container" style="min-width: 310px; max-width: 600px; height: 400px; margin: 0 auto"></div>
+<script>
+    $(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Graficas detalladas de usuario'
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Tickets'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    point: {
+                        events: {
+                            click: function () {
+                                var drilldown = this.drilldown;
+                                if (drilldown) {
+//                                    alert(1233);
+                                } else { // restore
+                                }
+                            }
+                        }
+                    },
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function () {
+                            return '<b>' + this.point.name + '</b>: ' + this.y;
+                        }
+                    }
+                },
+                series: {
+                    borderWidth: 2,
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            }, credits: {
+                enabled: false
+            },
+            series: [{
+                    id: 'toplevel',
+                    name: 'Usuarios',
+                    data: [
+<?php
+//USUARIOS GENERAL
+while ($row = $result->fetch_array()) {
+    echo "{name:'" . $row['Nombres'] . "' , y:" . $row['Cantidad'] . " ,drilldown : '" . $row['IdUsuario'] . "'},\n";
+}
+$result->data_seek(0);
+?>
+                    ]
+                }],
+            drilldown: {
+                series: [
+<?php
+//TICKETS POR CATEGORIA GENERAL DE USUARIO
+while ($row = $result->fetch_array()) {
+    echo "{\n id :'" . $row['IdUsuario'] . "',\n";
+    echo "name :'Tipo Solicitudes',";
+    $resultGeneral = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad ,Tipo,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo
+                                                            FROM acm_usuario_m_a  WHERE IdUsuario=" . $row['IdUsuario'] . "   GROUP BY IdUsuario , Tipo
+                                                            ");
+
+    echo "data :[";
+    while ($row = $resultGeneral->fetch_array()) {
+        echo "{name :'" . $row['cTipo'] . "',y:" . $row['Cantidad'] . ",drilldown : '" . $row['cTipo'] . $row['IdUsuario'] . "'},";
+    }
+    echo "]},\n";
+}
+
+$resultGeneral->close();
+//TICKEST POR CATEGORIA ESPECIFICA DE USUARIO
+//TICKETS SOFTWARE Y HARDWARE  GENERAL
+$resultGeneral = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad ,Tipo,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo
+                                                            FROM acm_usuario_m_a   GROUP BY IdUsuario , Tipo
+                                                            ");
+while ($rowGeneral = $resultGeneral->fetch_array()) {
+    //SI EL TIPO ES SOFTWARE
+    $resultSof = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad ,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo,
+                                                             subtiposolicitud
+                                                            FROM acm_usuario_m_a WHERE Tipo =" . $rowGeneral['Tipo'] . " AND IdUsuario =" . $rowGeneral['IdUsuario'] . "  GROUP BY  
+                                                            subtiposolicitud ORDER BY Cantidad DESC ");
+    if ($rowGeneral['Tipo'] == 1) {
+        $A = $resultSof->num_rows;
+        if ($A > 0) {
+            //Si es tipo de solicitud Sofware se valida por aplicativo GENERAL
+            $resultGeneralSof = $mysqli->query("SELECT IdUsuario,Tipo,SUM(cantidad) AS Cantidad,subtiposolicitud,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo
+                                                            FROM acm_usuario_m_a WHERE IdUsuario = " . $rowGeneral['IdUsuario'] . " AND Tipo= " . $rowGeneral['Tipo'] . " AND subtiposolicitud LIKE 'PS%'  GROUP BY IdUsuario,Tipo
+                                                            UNION
+                                                            SELECT IdUsuario,Tipo,SUM(cantidad) AS Cantidad,subtiposolicitud,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo
+                                                            FROM acm_usuario_m_a WHERE IdUsuario = " . $rowGeneral['IdUsuario'] . " AND Tipo= " . $rowGeneral['Tipo'] . " AND subtiposolicitud LIKE 'ST%'  GROUP BY IdUsuario,Tipo
+                                                             UNION
+                                                            SELECT IdUsuario,Tipo,SUM(cantidad) AS cantidad,subtiposolicitud,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo
+                                                            FROM acm_usuario_m_a WHERE IdUsuario = " . $rowGeneral['IdUsuario'] . " AND Tipo= " . $rowGeneral['Tipo'] . " AND subtiposolicitud LIKE 'CM%'  GROUP BY IdUsuario,Tipo
+                                                            ");
+            $A = $resultGeneralSof->num_rows;
+            if ($A > 0) {
+                echo "{\n id :'Software" . $rowGeneral['IdUsuario'] . "',\n";
+                echo "name :'" . $rowGeneral['cTipo'] . "',";
+                echo "data :[\n";
+                while ($rowsoftware = $resultGeneralSof->fetch_array()) {
+                    $TipoSof = explode("_", $rowsoftware['subtiposolicitud']);
+                    switch ($TipoSof[0]) {
+                        case "PS":
+                            $TipoSofName = "PORTAL SIGAME";
+
+                            break;
+                        case "ST":
+                            $TipoSofName = "SALUD TOTAL";
+
+                            break;
+                        case "CM":
+                            $TipoSofName = "CUENTAS MEDICAS";
+
+                            break;
+                    }
+                    echo "{\n name :'" . $TipoSofName . "',y:" . $rowsoftware['Cantidad'] . ",drilldown : '" . $TipoSofName . $rowsoftware['IdUsuario'] . "'\n},";
+                }
+                echo "]},\n";
+            }
+        }
+    } elseif ($rowGeneral['Tipo'] == 2) {
+        echo "{\n id :'" . $rowGeneral['cTipo'] . $rowGeneral['IdUsuario'] . "',\n";
+        echo "name :'" . $rowGeneral['cTipo'] . "',";
+        echo "data :[";
+        while ($row2 = $resultSof->fetch_array()) {
+            echo "{name :'" . $row2['subtiposolicitud'] . "',y:" . $row2['Cantidad'] . ",drilldown : 'null'},";
+        }
+        echo "]},\n";
+    }
+}
+
+$resultGeneral = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad ,Tipo,subtiposolicitud ,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo
+                                                            FROM acm_usuario_m_a  WHERE Tipo =1  GROUP BY IdUsuario , Tipo
+                                                            ");
+while ($rowGeneral = $resultGeneral->fetch_array()) {
+    $resultSof1 = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad ,subtiposolicitud,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo,
+                                                             subtiposolicitud
+                                                            FROM acm_usuario_m_a WHERE Tipo = 1 AND IdUsuario =" . $rowGeneral['IdUsuario'] . " AND subtiposolicitud LIKE 'PS%'   GROUP BY  
+                                                            subtiposolicitud ORDER BY subtiposolicitud DESC ");
+    echo "{\n id :'PORTAL SIGAME" . $rowGeneral['IdUsuario'] . "',\n";
+    echo "name :'PT" . $rowGeneral['IdUsuario'] . "',\n";
+    echo "data :[";
+    while ($row2 = $resultSof1->fetch_array()) {
+        echo "{\n name :'" . $row2['subtiposolicitud'] . "',y:" . $row2['Cantidad'] . ",drilldown : 'null' \n},";
+    }
+    echo "]},\n ";
+    $resultSof2 = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad ,subtiposolicitud,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo,
+                                                             subtiposolicitud
+                                                            FROM acm_usuario_m_a WHERE Tipo = 1 AND IdUsuario =" . $rowGeneral['IdUsuario'] . " AND subtiposolicitud LIKE 'ST%'  GROUP BY  
+                                                            subtiposolicitud ORDER BY subtiposolicitud DESC ");
+    echo "{\n id :'SALUD TOTAL" . $rowGeneral['IdUsuario'] . "',\n";
+    echo "name :'ST" . $rowGeneral['IdUsuario'] . "',\n";
+    echo "data :[";
+    while ($row2 = $resultSof2->fetch_array()) {
+        echo "{\n name :'" . $row2['subtiposolicitud'] . "',y:" . $row2['Cantidad'] . ",drilldown : 'null' \n},";
+    }
+    echo "]},\n ";
+    $resultSof3 = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad ,subtiposolicitud,
+                                                            CASE Tipo
+                                                            WHEN  1   THEN 'Software'
+                                                            WHEN 2  THEN 'Hardware'
+                                                            END AS cTipo,
+                                                             subtiposolicitud
+                                                            FROM acm_usuario_m_a WHERE Tipo = 1 AND IdUsuario =" . $rowGeneral['IdUsuario'] . "  AND subtiposolicitud LIKE 'CM%'  GROUP BY  
+                                                            subtiposolicitud ORDER BY subtiposolicitud DESC ");
+    echo "{\n id :'CUENTAS MEDICAS" . $rowGeneral['IdUsuario'] . "',\n";
+    echo "name :'CM" . $rowGeneral['IdUsuario'] . "',\n";
+    echo "data :[";
+    while ($row2 = $resultSof3->fetch_array()) {
+        echo "{\n name :'" . $row2['subtiposolicitud'] . "',y:" . $row2['Cantidad'] . ",drilldown : 'null' \n},";
+    }
+    echo "]},\n ";
+}
+?>
+                ]
+            }
+        });
+
+    });
 
 
-<form data-toggle="validator" role="form">
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputEmail3" class="control-label">Email</label>
-        </div>
-        <div class="col-sm-10">
-            <input type="email" class="form-control" id="inputName" placeholder="Email" value ="" required></input>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputEmail3" class="control-label">Nombres</label>
-        </div>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputEmail3" placeholder="Nombres" value="" required>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputEmail3" class="control-label">Apellidos</label>
-        </div>
-        <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputEmail3" placeholder="Apellidos" value="">
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputEmail3" class="control-label">Rol</label>
-        </div>
-        <div class="col-sm-10">
+</script>
+<?php
 
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputEmail3" class="control-label">Grupo</label>
-        </div>
-        <div class="col-sm-10">
-
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputPassword3" class="control-label">Contraseña</label>
-        </div>
-        <div class="col-sm-10">
-            <input type="password" class="form-control" id="inputPassword3" placeholder="Contraseña">
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-sm-2">
-            <label for="inputPassword3" class="control-label">Confirmar Contraseña</label>
-        </div>
-        <div class="col-sm-10">
-            <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Modificar </button>
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-
-</form>
+?>
