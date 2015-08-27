@@ -16,7 +16,7 @@ if (!isset($_SESSION['menBienvenida'])) {
     $_SESSION['menBienvenida'] = 1;
     if (isset($_SESSION['Nombres'])) {
         ?>
-                    Alert_Info("Bienvenido <?php echo $_SESSION['Nombres']; ?>");
+         Alert_Info("Bienvenido <?php echo $_SESSION['Nombres']; ?>");
         <?php
     }
 }
@@ -46,15 +46,15 @@ if (isset($_GET['error'])) {
         //Consulta de las solicitud  
         if ($_SESSION['Rol'] == "Administrador") { //Valida Permisos Administrador
             if (isset($_POST['ticket'])) { // Valida si es por buscador
-                $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdSolicitud=" . $_POST['ticket']);
+                $result = $mysqli->query("SELECT * FROM Solicitud INNER JOIN Usuarios ON Solicitud.IdUsuario =  Usuarios.IdUsuario WHERE IdSolicitud=" . $_POST['ticket']);
             } else {
-                $result = $mysqli->query("SELECT * FROM Solicitud ORDER BY IdSolicitud DESC");
+                $result = $mysqli->query("SELECT * FROM Solicitud INNER JOIN Usuarios ON Solicitud.IdUsuario =  Usuarios.IdUsuario ORDER BY IdSolicitud DESC");
             }
         } else {//Valida permisos usuario
             if (isset($_POST['ticket'])) {// Valida si es por buscador
-                $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdSolicitud=" . $_POST['ticket'] . " AND IdUsuario = " . $_SESSION['IdUsuario']);
+                $result = $mysqli->query("SELECT * FROM Solicitud  INNER JOIN Usuarios ON Solicitud.IdUsuario =  Usuarios.IdUsuario WHERE Solicitud.IdSolicitud=" . $_POST['ticket'] . " AND Usuarios.IdUsuario = " . $_SESSION['IdUsuario']);
             } else {
-                $result = $mysqli->query("SELECT * FROM Solicitud WHERE IdUsuario =" . $_SESSION['IdUsuario'] . " ORDER BY IdSolicitud DESC");
+                $result = $mysqli->query("SELECT * FROM Solicitud  INNER JOIN Usuarios ON Solicitud.IdUsuario =  Usuarios.IdUsuario WHERE Solicitud.IdUsuario =" . $_SESSION['IdUsuario'] . " ORDER BY IdSolicitud DESC");
             }
         }
         ?>
@@ -75,7 +75,7 @@ if (isset($_GET['error'])) {
         <!--POPPUO DE SIGUIENTE ESTADO-->
         <div class="section">           
             <h1 id ="titulo" class="text-center">SOLICITUDES</h1>    
-            
+
         </div>
         <div class="section">
             <div class="container">
@@ -86,6 +86,7 @@ if (isset($_GET['error'])) {
                                 <tr>
                                     <th data-field="id" data-align="left" data-sortable="true"># Solicitud</th>
                                     <th >Nombre</th>
+                                    <th >Usuario</th>
                                     <th data-align="left" data-sortable="true">Fecha Inicio</th>
                                     <th data-align="left" data-sortable="true">Fecha Fin</th>
                                     <th data-align="center" data-sortable="true">Estado</th>
@@ -99,18 +100,19 @@ if (isset($_GET['error'])) {
                                     if ($rowEstado = $resultEstado->fetch_array()) {
                                         if (isset($_GET['Det'])) {
                                             if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
-                                                if ($rowEstado['Proceso'] == 'Abierto' || $rowEstado['Proceso'] == 'ProcesoSistemas') {
+                                                if ($rowEstado['Proceso'] == 'Abierto' || $rowEstado['Proceso'] == 'Onteal') {
                                                     echo"<tr>"
                                                     . "<td>" . $row['IdSolicitud'] . "</td>
                                                            <td>" . $row['nombre'] . "</td>
+                                                           <td>" . $row['Nombres'] . "</td>
                                                            <td>" . $row['FechaInicio'] . "</td>
                                                            <td>" . $row['FechaFin'] . "</td>";
                                                     echo "<td>";
                                                     if ($rowEstado['Proceso'] == 'Abierto') {
                                                         echo "<span class='label label-primary'>Abierto</span>";
                                                     }
-                                                    if ($rowEstado['Proceso'] == 'ProcesoSistemas') {
-                                                        echo "<span class='label label-success'>Proceso Sistemas</span>";
+                                                    if ($rowEstado['Proceso'] == 'Onteal') {
+                                                        echo "<span class='label label-success'>Onteal</span>";
                                                     }
                                                     ?>
 
@@ -127,10 +129,11 @@ if (isset($_GET['error'])) {
                                                 echo"<tr>"
                                                 . "<td>" . $row['IdSolicitud'] . "</td>
                                                            <td>" . $row['nombre'] . "</td>
+                                                               <td>" . $row['Nombres'] . "</td>
                                                            <td>" . $row['FechaInicio'] . "</td>
                                                            <td>" . $row['FechaFin'] . "</td>";
                                                 echo "<td>";
-                                                if ($rowEstado['Proceso'] == 'Proceso') {
+                                                if ($rowEstado['Proceso'] == 'Devuelto') {
                                                     echo "<span class='label label-success'>Proceso</span>";
                                                 }
                                                 if ($rowEstado['Proceso'] == 'Resuelto') {
@@ -150,6 +153,7 @@ if (isset($_GET['error'])) {
                                         echo"<tr>"
                                         . "<td>" . $row['IdSolicitud'] . "</td>
                                              <td>" . $row['nombre'] . "</td>
+                                             <td>" . $row['Nombres'] . "</td>             
                                              <td>" . $row['FechaInicio'] . "</td>
                                              <td>" . $row['FechaFin'] . "</td>";
                                         echo "<td>";
@@ -162,11 +166,11 @@ if (isset($_GET['error'])) {
                                         if ($rowEstado['Proceso'] == 'Cerrado') {
                                             echo "<span class='label label-default'>Cerrado</span>";
                                         }
-                                        if ($rowEstado['Proceso'] == 'Proceso') {
-                                            echo "<span class='label label-success'>Proceso</span>";
+                                        if ($rowEstado['Proceso'] == 'Devuelto') {
+                                            echo "<span class='label label-success'>Devuelto</span>";
                                         }
-                                        if ($rowEstado['Proceso'] == 'ProcesoSistemas') {
-                                            echo "<span class='label label-success'>Proceso Sistemas</span>";
+                                        if ($rowEstado['Proceso'] == 'Onteal') {
+                                            echo "<span class='label label-success'>Onteal</span>";
                                         }
                                         if ($rowEstado['Proceso'] == 'Resuelto') {
                                             echo "<span class='label label-warning'>Resuelto</span>";

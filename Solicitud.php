@@ -70,7 +70,7 @@
                                         <optgroup label="SALUD TOTAL">
                                             <option value="1">STAR</option>
                                             <option value="2">Analisis Seg.  Pendientes</option>
-                                            <option value="3">Impresion Actas Masivas</option>
+                                            <option value="3">Impresión Actas Masivas</option>
                                             <option value="4">Imagen</option>
                                             <option value="5">SIGSC</option>
                                             <option value="6">Consulta NAP</option>
@@ -138,14 +138,11 @@
             $("#input-700").fileinput({
                 language: "es",
                 uploadUrl: "http://localhost/site/file-upload-batch",
-                allowedFileExtensions: ["jpg", "png", "gif","doc","xls","pdf"],
+                allowedFileExtensions: ["jpg", "png", "gif","doc","xls","pdf","xlsx","zip","rar"],
                // allowedFileTypes:["jpg", "png", "gif","doc"],
                 minFileCount: 1,
-                maxFileCount: 3,
+                maxFileCount: 5,
                 uploadAsync: true
-                
-              
-             
             });
         </script> 
         

@@ -9,6 +9,11 @@ $result2 = $mysqli->query("SELECT * FROM SolicitudProceso WHERE IdSolicitud = " 
 $general = $result->fetch_array();
 ?>
 <script src="js/OntelJS.js" type="text/javascript"></script>
+
+<script src="js/fileinput.js" type="text/javascript"></script>
+<script src="js/fileinput.min.js" type="text/javascript"></script>
+<script src="js/fileinput_locale_es.js" type="text/javascript"></script>
+<link href="css/fileinput.css" rel="stylesheet" type="text/css"/>
 <!--POPPUP INFORMACION-->
 <div class="modal-body">
     <form class="form-horizontal" role="form">
@@ -37,7 +42,7 @@ $general = $result->fetch_array();
                        "><?php echo $general['Nombres'] . "  " . $general['Apellidos']; ?></label>
             </div>
         </div>
-        
+
         <div class="form-group">
             <div class="col-sm-2">
                 <label for="inputEmail3" class="control-label" style='display:initial;'>Tipo Solicitud:</label>
@@ -109,22 +114,56 @@ $general = $result->fetch_array();
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab1default" data-toggle="tab">Procesos</a></li>
                         <li><a href="#tab2default" data-toggle="tab">Archivos</a></li>
+
                     </ul>
                 </div>
                 <div class="panel-body">
                     <div class="tab-content">
                         <div class="tab-pane fade in active" id="tab1default">        
-                            <table id ="SolDes" class="table table-condensed table-hover table-striped" >
+                            <table  id="table" data-url="inicio.php" data-toggle="table"   data-height="300" data-show-toggle="true" >
                                 <tbody>
                                     <?php
                                     while ($row = $result2->fetch_array()) {
                                         ?>
                                         <tr>
-                                            <td><?php echo $row['IdSolicitudProceso']; ?></td>
-                                            <td><?php echo $row['Proceso']; ?></td>
-                                            <td><?php echo $row['FechaCreacion']; ?></td>
-                                            <td><?php echo $row['Observacion']; ?></td>
+                                            <td class="clickable" data-toggle="collapse" id="row1" data-target=".row<?php echo $row['IdSolicitudProceso']; ?>"><?php echo $row['IdSolicitudProceso']; ?></td>
+                                            <td class="clickable" data-toggle="collapse" id="row1" data-target=".row<?php echo $row['IdSolicitudProceso']; ?>"><?php echo $row['Proceso']; ?></td>
+                                            <td class="clickable" data-toggle="collapse" id="row1" data-target=".row<?php echo $row['IdSolicitudProceso']; ?>"><?php echo $row['FechaCreacion']; ?></td>
+                                            <td class="clickable" data-toggle="collapse" id="row1" data-target=".row<?php echo $row['IdSolicitudProceso']; ?>"><?php echo $row['Observacion']; ?></td>
+                                            <td class="clickable" data-toggle="collapse" id="row1" data-target=".row<?php echo $row['IdSolicitudProceso']; ?>"><?php
+                                                if (!empty($row['Archivos'])) {
+                                                    echo '<i class="fa fa-2x fa-fw fa-paperclip"></i>';
+                                                }
+                                                ?>
+                                            </td>
                                         </tr>
+                                        <?php
+                                        $rutas = $row['Archivos'];
+                                        $ruta = explode('|', $rutas);
+                                        $a = 1;
+                                        $cont = count($ruta);
+                                        $cont--;
+                                        foreach ($ruta as $value) {
+                                            if ($a <= (count($ruta) - 1)) {
+                                                ?>
+                                                <tr class="collapse row<?php echo $row['IdSolicitudProceso']; ?>">
+
+                                                    <?php
+                                                    $a++;
+                                                    $ext = explode('.', $value);
+                                                    ?>
+                                                    <td></td>
+                                                    <td><h4 class="media-heading"><?php echo $ext[0]; ?></h4></td>
+                                                    <td><a class="btn btn-default view-pdf" data-toggle="modal" data-target="#view" href="<?php echo $value; ?>"><i class="fa fa-2x fa-fw pull-right fa-binoculars"></i></a>
+                                                    </td>
+                                                    <td><a class="btn btn-default download" onclick="file('<?php echo $value; ?>');"  ><i class="fa fa-2x fa-floppy-o fa-fw pull-right"></i></a>
+                                                    </td>
+                                                </tr>
+
+                                                <?php
+                                            }
+                                        }
+                                        ?>
                                         <?php
                                         $ultimoProceso = $row['Proceso'];
                                     }
@@ -136,6 +175,7 @@ $general = $result->fetch_array();
                                         <th>Proceso</th>
                                         <th>Fecha Creación</th>
                                         <th>Observación</th>
+                                        <th>Archivos</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -209,18 +249,20 @@ $general = $result->fetch_array();
     <?php
     if ($ultimoProceso != 'Cerrado' && $ultimoProceso != 'Cancelado') {
         switch ($ultimoProceso) {
-            
+
             case 'Abierto':
                 if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
                     echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
                 }
                 break;
-            case 'Proceso':
+            case 'Devuelto':
                 if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
                     echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
                 }
+                echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
+
                 break;
-            case 'ProcesoSistemas':
+            case 'Onteal':
                 if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
                     echo '<a class = "btn btn-primary" data-toggle = "modal" data-target = "#proceso">Siguiente Proceso</a>';
                 }
@@ -244,20 +286,28 @@ $general = $result->fetch_array();
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" >×</button>
             <h4 class="modal-title">¿ Esta seguro que desea cancelar la solicitud ?</h4>
         </div>
-        <div class="modal-body">
-            <p>La solicitud  numero :  <?php echo $general['IdSolicitud']; ?>
-                <br> Sera cancelada y no seguira con el soporte.
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a class="btn btn-default" data-dismiss="modal" >No</a>
-            <a class="btn btn-primary" data-toggle="modal" >Si</a>
-        </div>
+        <form class="form-horizontal" role="form" method="POST" action="models/cancelTicket.php" enctype="multipart/form-data">
+
+            <div class="modal-body">
+
+                <p>La solicitud  numero :  <?php echo $general['IdSolicitud']; ?>
+                    <br> Sera cancelada y no seguira con el soporte.
+                </p>
+                <textarea name="taCancelacion" class="form-control input-sm " type="textarea" id="message"
+                          placeholder="Observaciones del la cancelación  de la solicitud" maxlength="250" rows="7" required></textarea>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" name="IdSolicitud" value="<?php echo $general['IdSolicitud']; ?> " />
+                <a class="btn btn-default" data-dismiss="modal">No</a>
+                <!--CANCELACION DE  SOLICITUD-->
+                <button  type="submit" class="btn btn-primary">Si</button>
+            </div>
+        </form>
     </div>
 </div>
 <!--POPPUP DE VALIDACION CANCELACION-->
 
-<!--POPPUp DE SIGUIENTE ESTADO O PROCESO-->
+<!--POPPUP DE SIGUIENTE ESTADO O PROCESO-->
 <div id="proceso" class="modal fade" tabindex="-1" data-focus-on="input:first" style="display: none;">
     <div class="modal-content">
         <div class="modal-header">
@@ -278,23 +328,23 @@ $general = $result->fetch_array();
                                       echo ' <input type="hidden" name="selTypeProcess" value="2"/>';
                                   }
                                   break;
-                              case 'Proceso':
-                                  if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
+                              case 'Devuelto':
+//                                  if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Usuario') {
                                       ?>
                             <select name = "selTypeProcess" class = "form-control">
                                 <option value = "0" selected = "" >Seleccione el proceso</option>
-                                <option value = "2">Proceso Sistemas</option>
+                                <option value = "2">Onteal</option>
                                 <option value = "5">Cerrado</option>
                             </select>
                             <?php
-                        }
+//                        }
                         break;
-                    case 'ProcesoSistemas':
+                    case 'Onteal':
                         if (isset($_SESSION['Rol']) && $_SESSION['Rol'] == 'Administrador') {
                             ?>
                             <select name = "selTypeProcess" class = "form-control">
                                 <option value = "0" selected = "" >Seleccione el proceso</option>
-                                <option value = "3">Proceso</option>
+                                <option value = "3">Devuelto</option>
                                 <option value = "4">Resuelto</option>
                             </select>
                             <?php
@@ -305,13 +355,16 @@ $general = $result->fetch_array();
                             ?>
                             <select name = "selTypeProcess" class = "form-control">
                                 <option value = "0" selected = "" >Seleccione el proceso</option>
-                                <option value = "2">Proceso Sistemas</option>
+                                <option value = "2">Onteal</option>
                                 <option value = "5">Cerrado</option>
                             </select>
-                        <?php
+                            <?php
                         }
                         break;
-                }?>
+                }
+                ?>
+                <input   name="file[]" id="input-700" type="file" multiple=true class="file-loading">
+
                 <input type="hidden" name="IdSolicitud" value="<?php echo $IdSolicitud; ?>" />
                 <div class="modal-footer">
                     <a class="btn btn-default" data-dismiss="modal">Cancelar</a>
@@ -321,7 +374,7 @@ $general = $result->fetch_array();
         </div>
     </div>
 </div>
-<!--POPPUO DE SIGUIENTE ESTADO-->
+<!--POPPUP DE SIGUIENTE ESTADO-->
 
 <!--VER ARCHIVOS-->
 <div id="view" class="modal fade" tabindex="-1" data-focus-on="input:first"  style="display: none;">
@@ -331,7 +384,7 @@ $general = $result->fetch_array();
             <h4 id="nameFile" class="modal-title" ></h4>
         </div>
         <div class="modal-body" style="max-height: 420px;overflow-y: auto;">
-            <div class="iframe-container" id="framefile"></iframe></div>
+            <div class="iframe-container" id="framefile"></div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal">Cerrar</button>
@@ -339,5 +392,17 @@ $general = $result->fetch_array();
     </div>
 </div>
 <iframe id="secretIFrame" src="" style="display:none; visibility:hidden;"></iframe>
-
+<script src="js/bootstrap-table.js" type="text/javascript"></script>
+<script src="js/bootstrap-table-es-MX.js" type="text/javascript"></script>
+<link href="css/bootstrap-table.css" rel="stylesheet" type="text/css"/>
+<script>
+                                                            $("#input-700").fileinput({
+                                                                language: "es",
+                                                                uploadUrl: "http://localhost/site/file-upload-batch",
+                                                                allowedFileExtensions: ["jpg", "png", "gif", "doc", "xls", "pdf", "xlsx", "zip", "rar"],
+                                                                minFileCount: 1,
+                                                                maxFileCount: 5,
+                                                                uploadAsync: true
+                                                            });
+</script> 
 <!--VER ARCHIVOS-->

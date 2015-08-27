@@ -111,7 +111,7 @@ while ($row = $result->fetch_array()) {
 
 $resultGeneral->close();
 //TICKEST POR CATEGORIA ESPECIFICA DE USUARIO
-//TICKETS SOFTWARE Y HARDWARE  GENERAL
+//SOFTWARE Y HARDWARE  GENERAL
 $resultGeneral = $mysqli->query("SELECT IdUsuario,Nombres,Apellidos,SUM(Cantidad) AS Cantidad ,Tipo,
                                                                     CASE Tipo
                                                                     WHEN  1   THEN 'Software'
@@ -130,6 +130,7 @@ while ($rowGeneral = $resultGeneral->fetch_array()) {
                                                                     FROM acm_usuario_m_a WHERE Tipo =" . $rowGeneral['Tipo'] . " AND IdUsuario =" . $rowGeneral['IdUsuario'] . "  GROUP BY  
                                                                     subtiposolicitud ORDER BY Cantidad DESC ");
     if ($rowGeneral['Tipo'] == 1) {
+        
         $A = $resultSof->num_rows;
         if ($A > 0) {
             //Si es tipo de solicitud Sofware se valida por aplicativo GENERAL

@@ -57,7 +57,7 @@ if (isset($_SESSION['IdUsuario'])) {
                     <div class="row">
                         <div class="col-md-6">
                             <h1 class="text-primary">Onteal Help Desk </h1>
-                            <h3>A Solucionar!</h3>-+  
+                            <h3>Creacion  y Administración de ticket con algun requerimiento.</h3>
                             <p></p>
                         </div>
                         <div class="col-md-6">

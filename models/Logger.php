@@ -25,7 +25,9 @@ class Logger {
         "10" => "Ocurrio un error mientras se modificaba el usuario",
         "11" => "Ocurrio un error mientras se modificaba el usarioRol",
         "12" => "El Rol del usuario es un campo obligatorio",
-        "13" => "El Grupo del usuario es un campo obligatorio"
+        "13" => "El Grupo del usuario es un campo obligatorio",
+        "14" => "La contraseña del usuario es incorrecta    Intente  de nuevo",
+        "15" => "El  usuario no se encuentra registrado  Verifiquelo"
     ];
     private $Acciones = [
         "1" => "Solicitud enviada exitosamente",

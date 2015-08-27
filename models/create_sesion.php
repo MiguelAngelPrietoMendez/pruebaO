@@ -40,12 +40,12 @@ if ($result = $mysqli->query("SELECT * FROM Usuarios WHERE Login='" . $itUsuario
         } else {
             $result->close();
             $result2->close();
-            header("Location: ../index.php?Error=2");
+            header("Location: ../index.php?error=14");
         }
     } else {
         $result->close();
         //Mensaje de no existe el usuario
-        header("Location: ../index.php?Error=1");
+        header("Location: ../index.php?error=15");
     }
 }
 ?>

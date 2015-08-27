@@ -1,6 +1,5 @@
 <?php
 
-$a = "123";
 session_start();
 include 'access_db.php';
 
@@ -26,10 +25,10 @@ for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
 //    {
 
     if ($_FILES["file"]["name"][$i] === "" || empty($_FILES["file"]["name"][$i])) {
-        echo "siass" . $_FILES["file"]["name"][$i];
+//        echo "siass" . $_FILES["file"]["name"][$i];
         $count++;
     } else {
-        echo "nokas" . $_FILES["file"]["name"][$i];
+//        echo "nokas" . $_FILES["file"]["name"][$i];
         if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], "../uploadTicket/" . $_FILES["file"]["name"][$i])) {
             $path_parts = pathinfo($_FILES["file"]["name"][$i]);
             $image_path = $path_parts['filename'] . '_' . time() . '.' . $path_parts['extension'];
@@ -44,8 +43,6 @@ for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
             echo "Error subiendo el archivo \n Por favor comuniqueses con su administrador";
         }
     }
-
-
 //    }
 }
 if ($count == count($_FILES["file"]["name"])) {
@@ -55,7 +52,7 @@ if ($count == count($_FILES["file"]["name"])) {
         $result2 = $mysqli->query("SELECT IdSolicitud FROM solicitud ORDER BY IdSolicitud DESC LIMIT 1");
         $row2 = $result2->fetch_array();
         $IdSolicitud = $row2["IdSolicitud"];
-        $result3 = $mysqli->query("INSERT INTO solicitudproceso (IdSolicitud,Proceso,IdUsuario)VALUES(" . $IdSolicitud . ",'Abierto'," . $_SESSION['IdUsuario'] . ")");
+        $result3 = $mysqli->query("INSERT INTO solicitudproceso (IdSolicitud,Proceso,IdUsuario,Observacion)VALUES(" . $IdSolicitud . ",'Abierto'," . $_SESSION['IdUsuario'] . ",'Creación de la Solicitud , Proceso Inicial')");
         if ($result3) {
             //INSERT EXITOSO
             header("Location: ../Inicio.php?ok=1");
@@ -69,7 +66,6 @@ if ($count == count($_FILES["file"]["name"])) {
         header("Location: ../Inicio.php?error=1");
     }
 }
-
 
 echo "<br>" . count($_FILES["file"]["name"]);
 ?>

@@ -1,7 +1,7 @@
 
 <?php
 session_start();
-include 'models/access_db.php';
+include './models/access_db.php';
 include './models/Logger.php';
 
 $obj = unserialize($_SESSION['OBJ']);
@@ -96,44 +96,44 @@ if (isset($_GET['error'])) {
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div id="login-form" role="form" style="display: block;">
-                                        <table class="table table-hover table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>Login</th>
-                                                    <th>Nombres</th>
-                                                    <th>Apellidos</th>
-                                                    <th>Contraseña</th>
-                                                    <th>Estado</th>
-                                                    <th>Ver</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php while ($row = $result->fetch_array()) { ?>
+                                        <table data-url="inicio.php" data-toggle="table"    data-height="400"    >
+                                                <thead>
                                                     <tr>
-                                                        <td><?php echo $row['Login']; ?></td>
-                                                        <td><?php echo $row['Nombres']; ?></td>
-                                                        <td><?php echo $row['Apellidos']; ?></td>
-                                                        <td><?php echo $row['Password']; ?></td>
-                                                        <td>
-                                                            <?php if ($row['Estado'] == 1) { ?>
-                                                                <span class="label label-info">Activo</span>
-                                                            <?php } else {
-                                                                ?>
-                                                                <span class="label label-danger">Inactivo</span>
-                                                                <?php
-                                                            }
-                                                            ?>
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" onclick="InfoUsuario(<?php echo $row['IdUsuario']; ?>);">
-                                                                <i class="fa fa-eye fa-fw fa-lg"></i>
-                                                            </button>
-                                                        </td>
+                                                        <th>Login</th>
+                                                        <th>Nombres</th>
+                                                        <th>Apellidos</th>
+                                                        <th>Contraseña</th>
+                                                        <th>Estado</th>
+                                                        <th>Ver</th>
                                                     </tr>
-                                                <?php } ?>                                       
+                                                </thead>
+                                                <tbody>
+                                                    <?php while ($row = $result->fetch_array()) { ?>
+                                                        <tr>
+                                                            <td><?php echo $row['Login']; ?></td>
+                                                            <td><?php echo $row['Nombres']; ?></td>
+                                                            <td><?php echo $row['Apellidos']; ?></td>
+                                                            <td><?php echo $row['Password']; ?></td>
+                                                            <td>
+                                                                <?php if ($row['Estado'] == 1) { ?>
+                                                                    <span class="label label-info">Activo</span>
+                                                                <?php } else {
+                                                                    ?>
+                                                                    <span class="label label-danger">Inactivo</span>
+                                                                    <?php
+                                                                }
+                                                                ?>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModal" onclick="InfoUsuario(<?php echo $row['IdUsuario']; ?>);">
+                                                                    <i class="fa fa-eye fa-fw fa-lg"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    <?php } ?>                                       
 
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
                                     </div>
                                     <form id="register-form" clas ="form-horizontal" action="models/createUser.php" method="post" role="form" style="display: none;">
                                         <div class="form-group">
@@ -218,6 +218,9 @@ if (isset($_GET['error'])) {
                 </div>
             </div>
         </div>
+        <script src="js/bootstrap-table.js" type="text/javascript"></script>
+        <script src="js/bootstrap-table-es-MX.js" type="text/javascript"></script>
+        <link href="css/bootstrap-table.css" rel="stylesheet" type="text/css"/>
         <?php include'pie.php' ?>
     </body>
 </html>
